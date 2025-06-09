@@ -1,354 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SamFw IMEI Check API Integration</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    --color-bg: #ffffff;
-    --color-text-primary: #111827;
-    --color-text-secondary: #6b7280;
-    --color-primary: #000000;
-    --color-accent: #2563eb;
-    --color-error: #dc2626;
-    --radius: 0.75rem;
-    --shadow-light: 0 4px 8px rgb(0 0 0 / 0.05);
-    --transition-fast: 0.25s ease-in-out;
+/**
+ * Minimal Express server that proxies IMEI check requests to SamFw or another IMEI check service.
+ * 
+ * Usage:
+ * 1. Run `npm init -y`
+ * 2. Run `npm install express node-fetch cors`
+ * 3. Start server `node server.js`
+ *
+ * This server exposes POST /api/check-imei accepting JSON { "imei": "xxxxxxxxxxxxxxx" }
+ * It forwards the IMEI to the target service, processes response, and returns JSON to frontend.
+ *
+ * Note: Replace the TARGET_URL and headers with the actual SamFw API or web endpoint details.
+ *       Currently, example shows a placeholder URL and example fetch.
+ */
+
+const express = require('express');
+const fetch = require('node-fetch');
+const cors = require('cors');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors()); // Allow CORS for all origins - adjust as needed for production
+app.use(express.json());
+
+app.post('/api/check-imei', async (req, res) => {
+  const { imei } = req.body;
+  if (!imei || !/^\d{15}$/.test(imei)) {
+    return res.status(400).json({ error: 'Invalid IMEI number. Must be 15 digits.' });
   }
 
-  /* Reset and base */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background-color: var(--color-bg);
-    color: var(--color-text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+  try {
+    // PLACEHOLDER: Replace this URL with the real SamFw API endpoint or any other IMEI check API
+    const TARGET_URL = `https://samfw.com/imei?imei=${imei}`; // This is hypothetical, adjust based on real API
 
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 3rem 2rem 5rem;
-    flex: 1;
-  }
+    // Since SamFw likely does not have an open API, below is a hypothetical GET request.
+    // If SamFw API requires POST or other headers/auth, adjust accordingly.
 
-  header {
-    position: sticky;
-    top: 0;
-    background: var(--color-bg);
-    border-bottom: 1px solid #e5e7eb;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
-  }
+    const response = await fetch(TARGET_URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        // Add more headers if needed, e.g. API keys
+      },
+    });
 
-  header .logo {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--color-primary);
-    user-select: none;
-  }
-
-  nav a {
-    margin-left: 1.5rem;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color var(--transition-fast);
-  }
-
-  nav a:hover,
-  nav a:focus {
-    color: var(--color-accent);
-  }
-
-  main h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-    color: var(--color-primary);
-  }
-
-  main p.lead {
-    font-size: 1.125rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    margin-bottom: 2.5rem;
-  }
-
-  form {
-    display: flex;
-    max-width: 400px;
-    margin-bottom: 2rem;
-  }
-
-  input[type="text"] {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: var(--radius) 0 0 var(--radius);
-    border: 1px solid #d1d5db;
-    outline-offset: 2px;
-    transition: border-color var(--transition-fast);
-  }
-  input[type="text"]:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 4px var(--color-accent);
-  }
-
-  button {
-    background-color: var(--color-primary);
-    color: white;
-    font-weight: 700;
-    border: none;
-    padding: 0 1.5rem;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  button:hover:not(:disabled),
-  button:focus:not(:disabled) {
-    background-color: var(--color-accent);
-    transform: scale(1.05);
-  }
-  button:disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .error-message {
-    color: var(--color-error);
-    font-weight: 600;
-    margin-top: 0.25rem;
-  }
-
-  .result-card {
-    background: #f9fafb;
-    border-radius: var(--radius);
-    padding: 1.5rem 2rem;
-    box-shadow: var(--shadow-light);
-    font-size: 1rem;
-    color: var(--color-text-primary);
-  }
-
-  .result-card h2 {
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 1rem;
-  }
-
-  .result-field {
-    margin-bottom: 0.75rem;
-  }
-
-  .label {
-    font-weight: 600;
-    margin-right: 0.5rem;
-  }
-
-  .loading-spinner {
-    border: 3px solid #f3f4f6;
-    border-top: 3px solid var(--color-bg);
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (max-width: 480px) {
-    main h1 {
-      font-size: 2.25rem;
-    }
-    form {
-      flex-direction: column;
-      max-width: 100%;
-    }
-    input[type="text"] {
-      border-radius: var(--radius) var(--radius) 0 0;
-      margin-bottom: 0.5rem;
-    }
-    button {
-      border-radius: 0 0 var(--radius) var(--radius);
-      width: 100%;
-    }
-  }
-</style>
-</head>
-<body>
-<header>
-  <div class="logo">SamFw IMEI Check</div>
-  <nav>
-    <a href="https://samfw.com/imei" target="_blank" rel="noopener noreferrer">SamFw Official</a>
-  </nav>
-</header>
-
-<div class="container">
-  <main>
-    <h1>Check Your Samsung IMEI</h1>
-    <p class="lead">Enter your 15-digit IMEI number below to check Samsung device info and firmware details via SamFw.</p>
-
-    <form id="imeiForm" aria-label="IMEI Check Form">
-      <input 
-        type="text" 
-        id="imeiInput" 
-        name="imei" 
-        placeholder="Enter 15-digit IMEI" 
-        pattern="\\d{15}" 
-        maxlength="15" 
-        autocomplete="off"
-        aria-required="true"
-        aria-describedby="errorMsg"
-        inputmode="numeric"
-      />
-      <button type="submit" id="submitBtn" aria-label="Check IMEI">Check</button>
-    </form>
-    <div id="errorMsg" class="error-message" role="alert" aria-live="assertive"></div>
-
-    <section id="result" aria-live="polite" aria-atomic="true" hidden></section>
-  </main>
-</div>
-
-<script>
-  const form = document.getElementById('imeiForm');
-  const imeiInput = document.getElementById('imeiInput');
-  const submitBtn = document.getElementById('submitBtn');
-  const errorMsg = document.getElementById('errorMsg');
-  const resultSection = document.getElementById('result');
-
-  // Placeholder URL for SamFw API (replace this with actual API endpoint if available)
-  const SAMFW_API_URL = "https://samfw.com/api/check-imei"; // hypothetical endpoint
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errorMsg.textContent = '';
-    resultSection.hidden = true;
-    const imei = imeiInput.value.trim();
-
-    if (!/^\d{15}$/.test(imei)) {
-      errorMsg.textContent = 'Please enter a valid 15-digit IMEI number.';
-      return;
+    if (!response.ok) {
+      return res.status(response.status).json({ error: 'Failed to fetch from SamFw.' });
     }
 
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="loading-spinner" aria-hidden="true"></span> Checking...';
+    // Parse JSON response
+    const data = await response.json();
 
-    try {
-      // Example of direct fetch to SamFw API - here assumed GET with query param
-      const response = await fetch(`${SAMFW_API_URL}?imei=${imei}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+    // You might want to process or transform data here before sending to the client
+    // For example, pick relevant fields, handle errors, etc.
 
-      if (!response.ok) {
-        throw new Error('IMEI not found or API error');
-      }
-      const data = await response.json();
+    return res.json(data);
 
-      // Build results display from returned data
-      renderResult(data);
-    } catch (err) {
-      errorMsg.textContent = 'Error: ' + err.message;
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Check';
-    }
-  });
-
-  function renderResult(data) {
-    // Clear previous result
-    resultSection.innerHTML = '';
-
-    // Check if data has expected fields (simulate example)
-    if (!data || Object.keys(data).length === 0) {
-      resultSection.textContent = 'No data found for this IMEI.';
-      resultSection.hidden = false;
-      return;
-    }
-
-    // Example rendering of typical device info fields returned:
-    /*
-      {
-        "model": "Samsung Galaxy S21",
-        "status": "Valid",
-        "firmware": "G991BXXU1AUA1",
-        "manufacturer": "Samsung",
-        "warrantyStatus": "Active",
-        "activationDate": "2023-01-01"
-      }
-    */
-
-    const card = document.createElement('div');
-    card.className = 'result-card';
-
-    const title = document.createElement('h2');
-    title.textContent = data.model ? data.model : 'Device Information';
-    card.appendChild(title);
-
-    if (data.status) {
-      const field = createResultField('Status', data.status);
-      card.appendChild(field);
-    }
-    if (data.firmware) {
-      const field = createResultField('Firmware', data.firmware);
-      card.appendChild(field);
-    }
-    if (data.manufacturer) {
-      const field = createResultField('Manufacturer', data.manufacturer);
-      card.appendChild(field);
-    }
-    if (data.warrantyStatus) {
-      const field = createResultField('Warranty Status', data.warrantyStatus);
-      card.appendChild(field);
-    }
-    if (data.activationDate) {
-      const field = createResultField('Activation Date', data.activationDate);
-      card.appendChild(field);
-    }
-
-    resultSection.appendChild(card);
-    resultSection.hidden = false;
+  } catch (error) {
+    console.error('Error fetching IMEI info:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
+});
 
-  function createResultField(label, value) {
-    const div = document.createElement('div');
-    div.className = 'result-field';
-
-    const spanLabel = document.createElement('span');
-    spanLabel.className = 'label';
-    spanLabel.textContent = label + ':';
-
-    const spanValue = document.createElement('span');
-    spanValue.textContent = value;
-
-    div.appendChild(spanLabel);
-    div.appendChild(spanValue);
-    return div;
-  }
-</script>
-</body>
-</html>
+app.listen(PORT, () => {
+  console.log(`IMEI check proxy server running on port ${PORT}`);
+});
 
