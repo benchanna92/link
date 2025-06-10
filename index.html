@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Client Details & PDF Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet" />
   <style>
     :root {
       --color-bg: #ffffff;
@@ -307,7 +307,6 @@
       color: #22c55e;
       display: none;
     }
-
   </style>
 </head>
 <body>
@@ -323,7 +322,7 @@
 
   <main>
     <section class="hero" id="hero" role="banner" aria-label="Hero section with introduction">
-      <h1>Collect Client Details & Generate PDF Effortlessly</h1>
+      <h1>Collect Client Details &amp; Generate PDF Effortlessly</h1>
       <p>Enter your client’s information below to instantly create a professional PDF record.</p>
       <a href="#client-form-section" class="btn-primary" role="button">Get Started</a>
     </section>
@@ -362,7 +361,7 @@
           <textarea id="notes" name="notes" placeholder=" " rows="3"></textarea>
           <label for="notes" class="floating-label">Additional Notes</label>
         </div>
-        <button type="submit" aria-label="Generate PDF of client details">Generate PDF</button>
+        <button type="submit" aria-label="Generate PDF and send WhatsApp message">Generate PDF &amp; Send WhatsApp</button>
         <div id="success-message" role="alert" aria-live="polite"></div>
       </form>
     </section>
@@ -375,6 +374,7 @@
 
       const form = document.getElementById('client-form');
       const successMessage = document.getElementById('success-message');
+      const whatsappNumber = "60178040403";
 
       form.addEventListener('submit', e => {
         e.preventDefault();
@@ -397,10 +397,10 @@
           notes: formData.get('notes').trim(),
         };
 
-        generatePdf(clientData);
+        generatePdfAndNotifyWhatsapp(clientData);
       });
 
-      function generatePdf(data) {
+      function generatePdfAndNotifyWhatsapp(data) {
         const pdf = new jsPDF({
           unit: 'pt',
           format: 'letter',
@@ -426,7 +426,6 @@
           pdf.setFont('helvetica', 'bold');
           pdf.text(label + ':', marginLeft, y);
           pdf.setFont('helvetica', 'normal');
-          // Wrap text for value if too long
           const splitText = pdf.splitTextToSize(value, maxWidth - 150);
           pdf.text(splitText, marginLeft + 150, y);
           y += lineHeight * (splitText.length > 1 ? splitText.length : 1);
@@ -441,11 +440,36 @@
         addText('Address', data.address);
         addText('Additional Notes', data.notes);
 
-        pdf.save(`client_${data.firstName}_${data.lastName}.pdf`);
-        successMessage.textContent = 'PDF generated successfully!';
+        const fileName = `client_${data.firstName}_${data.lastName}.pdf`;
+        pdf.save(fileName);
+
+        successMessage.textContent = 'PDF generated and downloaded successfully. Opening WhatsApp...';
         successMessage.style.display = 'block';
 
         form.reset();
+
+        // Encode message for WhatsApp URL
+        const messageLines = [
+          "Hello,",
+          "I have generated the client PDF with the following details:",
+          `Name: ${data.firstName} ${data.lastName}`,
+          `Email: ${data.email}`,
+          `Phone: ${data.phone || 'N/A'}`,
+          `Date of Birth: ${data.dob || 'N/A'}`,
+          `Company: ${data.company || 'N/A'}`,
+          `Address: ${data.address || 'N/A'}`,
+          `Notes: ${data.notes || 'N/A'}`,
+          "",
+          "(Please find the PDF attached manually since automatic file attaching is not supported.)",
+        ];
+        const encodedMessage = encodeURIComponent(messageLines.join('\n'));
+
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+        // Open WhatsApp Web in new tab/window
+        setTimeout(() => {
+          window.open(whatsappUrl, '_blank', 'noopener');
+        }, 1000);
       }
     })();
   </script>
