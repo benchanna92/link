@@ -1,478 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Client Details & PDF Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --color-bg: #ffffff;
-      --color-text-primary: #111827;
-      --color-text-secondary: #6b7280;
-      --color-accent: #111111;
-      --color-input-bg: #f9fafb;
-      --color-shadow: rgba(0, 0, 0, 0.05);
-      --radius: 0.75rem;
-      --transition: 0.3s ease;
-      --max-width: 1200px;
-      font-size: 18px;
-      line-height: 1.6;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Monthly Budget & Daily Expense Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+  :root {
+    --color-text-base: #374151;
+    --color-text-muted: #6b7280;
+    --color-bg: #ffffff;
+    --color-primary: #111827;
+    --color-card-bg: #f9fafb;
+    --radius: 12px;
+    --shadow-light: 0 2px 8px rgba(0,0,0,0.07);
+    --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text-base);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.25em;
+    text-align: center;
+    color: var(--color-primary);
+  }
+
+  p.subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: 3rem;
+    text-align: center;
+    max-width: 480px;
+  }
+
+  main {
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .card {
+    background: var(--color-card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-light);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+  }
+
+  input[type="number"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #d1d5db;
+    color: var(--color-text-base);
+    font-weight: 500;
+    transition: border-color var(--transition-fast);
+  }
+
+  input[type="number"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.4);
+  }
+
+  button {
+    margin-top: 1rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.25rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    width: 100%;
+  }
+
+  button:hover,
+  button:focus-visible {
+    background-color: #1d4ed8;
+    transform: scale(1.03);
+    outline: none;
+  }
+
+  .expenses-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0 0;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: white;
+  }
+
+  .expenses-list li {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  .expenses-list li:last-child {
+    border-bottom: none;
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .summary > div {
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    text-align: center;
+  }
+
+  .summary .label {
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .summary .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 480px) {
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--color-bg);
-      color: var(--color-text-secondary);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      scroll-behavior: smooth;
+      padding: 24px 12px;
     }
-
-    a {
-      color: var(--color-accent);
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-    a:hover,
-    a:focus {
-      color: #4b5563;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      background-color: var(--color-bg);
-      box-shadow: 0 2px 8px var(--color-shadow);
-      z-index: 1000;
-    }
-
-    nav {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: var(--color-accent);
-      user-select: none;
-      letter-spacing: 0.05em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--color-text-secondary);
-    }
-
-    .nav-links a {
-      position: relative;
-      padding-bottom: 2px;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      height: 2px;
-      width: 0%;
-      background-color: var(--color-accent);
-      transition: width var(--transition);
-      border-radius: 2px;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a:focus::after {
-      width: 100%;
-    }
-
     main {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 6rem;
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
+      max-width: 100%;
     }
-
-    /* Hero Section */
-    .hero {
-      text-align: center;
-      padding-top: 4rem;
-      padding-bottom: 4rem;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: var(--color-accent);
-      margin: 0 0 1rem 0;
-      line-height: 1.1;
-    }
-
-    .hero p {
-      font-size: 1.125rem;
-      color: var(--color-text-secondary);
-      margin: 0 0 2rem 0;
-      font-weight: 500;
-    }
-
-    .btn-primary {
-      font-weight: 700;
-      font-size: 1.125rem;
-      background-color: var(--color-accent);
-      color: #fff;
-      padding: 1rem 2.5rem;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      transition: background-color var(--transition), transform var(--transition);
-      user-select: none;
-    }
-    .btn-primary:hover,
-    .btn-primary:focus {
-      background-color: #333333;
-      transform: scale(1.05);
-      outline: none;
-    }
-
-    /* Client Form Section */
-    section#client-form-section {
-      background: #f9fafb;
-      border-radius: var(--radius);
-      box-shadow: 0 6px 20px var(--color-shadow);
-      padding: 3rem 3rem 4rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.75rem 2rem;
-    }
-
-    form .full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      position: relative;
-      display: block;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--color-text-secondary);
-      margin-bottom: 0.5rem;
-      user-select: none;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      border-radius: var(--radius);
-      border: 1px solid #d1d5db;
-      background-color: var(--color-bg);
-      color: var(--color-text-primary);
-      transition: border-color var(--transition), box-shadow var(--transition);
-      font-family: 'Poppins', sans-serif;
-    }
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--color-accent);
-      box-shadow: 0 0 10px rgba(17,17,17,0.15);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    /* Floating label style */
-    input:focus + .floating-label,
-    input:not(:placeholder-shown) + .floating-label,
-    textarea:focus + .floating-label,
-    textarea:not(:placeholder-shown) + .floating-label
-    {
-      top: -0.9rem;
-      left: 1rem;
-      font-size: 0.75rem;
-      color: var(--color-accent);
-      background: var(--color-bg);
-      padding: 0 0.3rem;
-      user-select: none;
-      font-weight: 700;
-      transform-origin: left center;
-      transform: scale(0.9);
-      transition: all 0.2s ease-out;
-      pointer-events: none;
-      position: absolute;
-      z-index: 1;
-    }
-
-    .floating-label {
-      position: absolute;
-      top: 50%;
-      left: 1rem;
-      transform: translateY(-50%);
-      color: #9ca3af;
-      pointer-events: none;
-      transition: all 0.2s ease-out;
-      user-select: none;
-      font-weight: 600;
-      font-size: 1rem;
-      background: transparent;
-      z-index: 0;
-    }
-
-    .input-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
-    button[type="submit"] {
-      grid-column: 1 / -1;
-      justify-self: center;
-      background-color: var(--color-accent);
-      color: white;
-      padding: 1rem 3rem;
-      font-weight: 700;
-      font-size: 1.125rem;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-      transition: background-color var(--transition), transform var(--transition);
-      user-select: none;
-    }
-    button[type="submit"]:hover,
-    button[type="submit"]:focus {
-      background-color: #333333;
-      transform: scale(1.05);
-      outline: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      main {
-        padding: 3rem 1rem 4rem;
-      }
-      form {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        display: none;
-      }
-      header nav {
-        padding: 1rem 1rem;
-      }
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
-      section#client-form-section {
-        padding: 2rem 1.5rem 3rem;
-      }
-    }
-
-    /* Success message */
-    #success-message {
-      margin-top: 1rem;
-      text-align: center;
-      font-weight: 600;
-      color: #22c55e;
-      display: none;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="logo" aria-label="Company Logo" tabindex="0">ClientPDF</div>
-      <div class="nav-links" role="navigation" aria-label="Main navigation">
-        <a href="#hero">Home</a>
-        <a href="#client-form-section">Get Started</a>
-      </div>
-    </nav>
-  </header>
+  <h1>Budget & Expense Tracker</h1>
+  <p class="subtitle">Easily manage your monthly budget and track daily expenses.</p>
 
   <main>
-    <section class="hero" id="hero" role="banner" aria-label="Hero section with introduction">
-      <h1>Collect Client Details &amp; Generate PDF Effortlessly</h1>
-      <p>Enter your client’s information below to instantly create a professional PDF record.</p>
-      <a href="#client-form-section" class="btn-primary" role="button">Get Started</a>
+    <section class="card" aria-labelledby="monthly-budget-label">
+      <label for="monthly-budget" id="monthly-budget-label">Set your Monthly Budget (RM)</label>
+      <input type="number" id="monthly-budget" min="0" step="0.01" placeholder="Enter your monthly budget in RM" aria-describedby="budget-help" />
+      <small id="budget-help" style="color: var(--color-text-muted); font-weight: 400;">Enter the total budget for the month.</small>
     </section>
 
-    <section id="client-form-section" aria-label="Client details form section" role="form">
-      <form id="client-form" novalidate>
-        <div class="input-wrapper">
-          <input type="text" id="firstName" name="firstName" placeholder=" " required autocomplete="given-name" />
-          <label for="firstName" class="floating-label">First Name *</label>
-        </div>
-        <div class="input-wrapper">
-          <input type="text" id="lastName" name="lastName" placeholder=" " required autocomplete="family-name" />
-          <label for="lastName" class="floating-label">Last Name *</label>
-        </div>
-        <div class="input-wrapper full-width">
-          <input type="email" id="email" name="email" placeholder=" " required autocomplete="email" />
-          <label for="email" class="floating-label">Email Address *</label>
-        </div>
-        <div class="input-wrapper">
-          <input type="tel" id="phone" name="phone" placeholder=" " autocomplete="tel" pattern="[0-9+\-\s]+" />
-          <label for="phone" class="floating-label">Phone Number</label>
-        </div>
-        <div class="input-wrapper">
-          <input type="date" id="dob" name="dob" placeholder=" " autocomplete="bday" />
-          <label for="dob" class="floating-label">Date of Birth</label>
-        </div>
-        <div class="input-wrapper full-width">
-          <input type="text" id="company" name="company" placeholder=" " autocomplete="organization" />
-          <label for="company" class="floating-label">Company Name</label>
-        </div>
-        <div class="input-wrapper full-width">
-          <textarea id="address" name="address" placeholder=" " rows="3"></textarea>
-          <label for="address" class="floating-label">Address</label>
-        </div>
-        <div class="input-wrapper full-width">
-          <textarea id="notes" name="notes" placeholder=" " rows="3"></textarea>
-          <label for="notes" class="floating-label">Additional Notes</label>
-        </div>
-        <button type="submit" aria-label="Generate PDF and send WhatsApp message">Generate PDF &amp; Send WhatsApp</button>
-        <div id="success-message" role="alert" aria-live="polite"></div>
-      </form>
+    <section class="card" aria-labelledby="daily-expense-label">
+      <label for="daily-expense" id="daily-expense-label">Add a Daily Expense (RM)</label>
+      <input type="number" id="daily-expense" min="0" step="0.01" placeholder="Enter expense for today in RM" />
+      <button type="button" id="add-expense-button" aria-describedby="expense-help">Add Expense</button>
+      <small id="expense-help" style="color: var(--color-text-muted); font-weight: 400;">Add your daily expenses one by one.</small>
+
+      <ul class="expenses-list" id="expenses-list" aria-live="polite" aria-label="List of added expenses">
+        <!-- daily expenses will appear here -->
+      </ul>
+    </section>
+
+    <section class="summary" aria-label="Budget summary">
+      <div>
+        <div class="label">Total Expenses</div>
+        <div class="value" id="total-expenses">RM0.00</div>
+      </div>
+      <div>
+        <div class="label">Remaining Budget</div>
+        <div class="value" id="remaining-budget">RM0.00</div>
+      </div>
     </section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-h0E9xyD8kM8ZfP1qhrpyl7NudQfVFZ4OJ0iTP5LS6MwcvhfertoN4Za8yvWZzkhMDxh6VDluLBmBlqPHLsjNVA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script>
-    (() => {
-      const { jsPDF } = window.jspdf;
+<script>
+  (() => {
+    const monthlyBudgetInput = document.getElementById('monthly-budget');
+    const dailyExpenseInput = document.getElementById('daily-expense');
+    const addExpenseButton = document.getElementById('add-expense-button');
+    const expensesList = document.getElementById('expenses-list');
+    const totalExpensesDisplay = document.getElementById('total-expenses');
+    const remainingBudgetDisplay = document.getElementById('remaining-budget');
 
-      const form = document.getElementById('client-form');
-      const successMessage = document.getElementById('success-message');
-      const whatsappNumber = "60178040403";
+    let monthlyBudget = 0;
+    let expenses = [];
 
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        successMessage.style.display = 'none';
+    function formatCurrency(value) {
+      return 'RM' + value.toFixed(2);
+    }
 
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
+    function updateSummary() {
+      const totalExpenses = expenses.reduce((a,b) => a + b, 0);
+      const remaining = monthlyBudget - totalExpenses;
 
-        const formData = new FormData(form);
-        const clientData = {
-          firstName: formData.get('firstName').trim(),
-          lastName: formData.get('lastName').trim(),
-          email: formData.get('email').trim(),
-          phone: formData.get('phone').trim(),
-          dob: formData.get('dob'),
-          company: formData.get('company').trim(),
-          address: formData.get('address').trim(),
-          notes: formData.get('notes').trim(),
-        };
+      totalExpensesDisplay.textContent = formatCurrency(totalExpenses);
+      remainingBudgetDisplay.textContent = formatCurrency(remaining >= 0 ? remaining : 0);
+      // Highlight if over budget
+      remainingBudgetDisplay.style.color = remaining < 0 ? '#dc2626' : 'var(--color-primary)';
+    }
 
-        generatePdfAndNotifyWhatsapp(clientData);
+    function renderExpenses() {
+      expensesList.innerHTML = '';
+      expenses.forEach((expense, idx) => {
+        const li = document.createElement('li');
+        li.textContent = formatCurrency(expense);
+        expensesList.appendChild(li);
       });
+    }
 
-      function generatePdfAndNotifyWhatsapp(data) {
-        const pdf = new jsPDF({
-          unit: 'pt',
-          format: 'letter',
-          putOnlyUsedFonts: true,
-        });
+    monthlyBudgetInput.addEventListener('input', e => {
+      const val = parseFloat(e.target.value);
+      monthlyBudget = isNaN(val) || val < 0 ? 0 : val;
+      updateSummary();
+    });
 
-        const marginLeft = 50;
-        const marginTop = 50;
-        const lineHeight = 22;
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const maxWidth = pageWidth - marginLeft * 2;
-
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(24);
-        pdf.text('Client Details', pageWidth / 2, marginTop, { align: 'center' });
-
-        pdf.setFontSize(14);
-        pdf.setFont('helvetica', 'normal');
-        let y = marginTop + 40;
-
-        function addText(label, value) {
-          if (!value) return;
-          pdf.setFont('helvetica', 'bold');
-          pdf.text(label + ':', marginLeft, y);
-          pdf.setFont('helvetica', 'normal');
-          const splitText = pdf.splitTextToSize(value, maxWidth - 150);
-          pdf.text(splitText, marginLeft + 150, y);
-          y += lineHeight * (splitText.length > 1 ? splitText.length : 1);
-        }
-
-        addText('First Name', data.firstName);
-        addText('Last Name', data.lastName);
-        addText('Email', data.email);
-        addText('Phone', data.phone);
-        addText('Date of Birth', data.dob);
-        addText('Company', data.company);
-        addText('Address', data.address);
-        addText('Additional Notes', data.notes);
-
-        const fileName = `client_${data.firstName}_${data.lastName}.pdf`;
-        pdf.save(fileName);
-
-        successMessage.textContent = 'PDF generated and downloaded successfully. Opening WhatsApp...';
-        successMessage.style.display = 'block';
-
-        form.reset();
-
-        // Encode message for WhatsApp URL
-        const messageLines = [
-          "Hello,",
-          "I have generated the client PDF with the following details:",
-          `Name: ${data.firstName} ${data.lastName}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone || 'N/A'}`,
-          `Date of Birth: ${data.dob || 'N/A'}`,
-          `Company: ${data.company || 'N/A'}`,
-          `Address: ${data.address || 'N/A'}`,
-          `Notes: ${data.notes || 'N/A'}`,
-          "",
-          "(Please find the PDF attached manually since automatic file attaching is not supported.)",
-        ];
-        const encodedMessage = encodeURIComponent(messageLines.join('\n'));
-
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-        // Open WhatsApp Web in new tab/window
-        setTimeout(() => {
-          window.open(whatsappUrl, '_blank', 'noopener');
-        }, 1000);
+    addExpenseButton.addEventListener('click', () => {
+      const val = parseFloat(dailyExpenseInput.value);
+      if (isNaN(val) || val <= 0) {
+        alert('Please enter a positive number for daily expense.');
+        dailyExpenseInput.focus();
+        return;
       }
-    })();
-  </script>
+      expenses.push(val);
+      dailyExpenseInput.value = '';
+      dailyExpenseInput.focus();
+      renderExpenses();
+      updateSummary();
+    });
+
+    dailyExpenseInput.addEventListener('keypress', (e) => {
+      if(e.key === 'Enter') {
+        addExpenseButton.click();
+      }
+    });
+
+  })();
+</script>
 </body>
 </html>
 
