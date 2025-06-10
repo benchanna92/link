@@ -1,272 +1,659 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Monthly Budget & Daily Expense Tracker</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Budget & Expense Tracker</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-  :root {
-    --color-text-base: #374151;
-    --color-text-muted: #6b7280;
-    --color-bg: #ffffff;
-    --color-primary: #111827;
-    --color-card-bg: #f9fafb;
-    --radius: 12px;
-    --shadow-light: 0 2px 8px rgba(0,0,0,0.07);
-    --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+    :root {
+      --color-text-base: #374151;
+      --color-text-muted: #6b7280;
+      --color-bg: #ffffff;
+      --color-primary: #111827;
+      --color-primary-dark: #1e40af;
+      --color-card-bg: #f9fafb;
+      --color-accent: #2563eb;
+      --radius: 12px;
+      --shadow-light: 0 2px 8px rgba(0,0,0,0.07);
+      --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-sans: 'Inter', sans-serif;
+      --header-height: 68px;
+    }
 
-  * {
-    box-sizing: border-box;
-  }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--color-bg);
-    color: var(--color-text-base);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-  }
-
-  h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 0.25em;
-    text-align: center;
-    color: var(--color-primary);
-  }
-
-  p.subtitle {
-    font-size: 1.125rem;
-    color: var(--color-text-muted);
-    margin-bottom: 3rem;
-    text-align: center;
-    max-width: 480px;
-  }
-
-  main {
-    max-width: 480px;
-    width: 100%;
-  }
-
-  .card {
-    background: var(--color-card-bg);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-light);
-    padding: 1.75rem 2rem;
-    margin-bottom: 2rem;
-  }
-
-  label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--color-primary);
-  }
-
-  input[type="number"] {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 1.5px solid #d1d5db;
-    color: var(--color-text-base);
-    font-weight: 500;
-    transition: border-color var(--transition-fast);
-  }
-
-  input[type="number"]:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 5px rgba(37, 99, 235, 0.4);
-  }
-
-  button {
-    margin-top: 1rem;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.65rem 1.25rem;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
-    width: 100%;
-  }
-
-  button:hover,
-  button:focus-visible {
-    background-color: #1d4ed8;
-    transform: scale(1.03);
-    outline: none;
-  }
-
-  .expenses-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 0.5rem 0 0 0;
-    max-height: 150px;
-    overflow-y: auto;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    background: white;
-  }
-
-  .expenses-list li {
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  .expenses-list li:last-child {
-    border-bottom: none;
-  }
-
-  .summary {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 2rem;
-    margin-top: 1rem;
-  }
-
-  .summary > div {
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow-light);
-    text-align: center;
-  }
-
-  .summary .label {
-    font-weight: 600;
-    color: var(--color-text-muted);
-    margin-bottom: 0.25rem;
-    font-size: 0.875rem;
-  }
-
-  .summary .value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-
-  @media (max-width: 480px) {
     body {
-      padding: 24px 12px;
+      margin: 0;
+      font-family: var(--font-sans);
+      background-color: var(--color-bg);
+      color: var(--color-text-base);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: var(--header-height);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
+    header {
+      width: 100%;
+      height: var(--header-height);
+      background: white;
+      box-shadow: var(--shadow-light);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--color-primary-dark);
+      user-select: none;
+    }
+
+    header .logo {
+      letter-spacing: -0.03em;
+    }
+
+    header nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header nav button, 
+    header nav a {
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.45rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color var(--transition-fast);
+      text-decoration: none;
+      user-select: none;
+    }
+
+    header nav button:hover,
+    header nav a:hover,
+    header nav button:focus-visible,
+    header nav a:focus-visible {
+      background-color: var(--color-primary-dark);
+      outline-offset: 2px;
+      outline-color: var(--color-primary-dark);
+    }
+
     main {
-      max-width: 100%;
+      max-width: 480px;
+      width: 100%;
+      padding: 3rem 2rem 4rem;
     }
-  }
-</style>
+
+    h1 {
+      font-size: 3.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+      text-align: center;
+      letter-spacing: -0.03em;
+      user-select:none;
+    }
+
+    p.subtitle {
+      font-size: 1.125rem;
+      color: var(--color-text-muted);
+      margin-bottom: 3.5rem;
+      text-align: center;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select:none;
+    }
+
+    .card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      padding: 2rem 2.5rem;
+      margin-bottom: 2.5rem;
+      box-sizing: border-box;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+      user-select:none;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      border: 1.5px solid #d1d5db;
+      color: var(--color-text-base);
+      font-weight: 500;
+      transition: border-color var(--transition-fast);
+      font-family: inherit;
+      user-select:text;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+    }
+
+    button,
+    input[type="submit"] {
+      margin-top: 1.25rem;
+      background-color: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.3rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), transform var(--transition-fast);
+      width: 100%;
+      user-select:none;
+      box-shadow: 0 4px 6px rgb(37 99 235 / 0.3);
+    }
+
+    button:hover,
+    button:focus-visible,
+    input[type="submit"]:hover,
+    input[type="submit"]:focus-visible {
+      background-color: var(--color-primary-dark);
+      transform: scale(1.04);
+      outline-offset: 3px;
+      outline-color: var(--color-primary-dark);
+      outline-style: solid;
+      outline-width: 2px;
+    }
+
+    small.helper-text {
+      color: var(--color-text-muted);
+      font-weight: 400;
+      user-select:none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .expenses-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 0.5rem;
+      max-height: 140px;
+      overflow-y: auto;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      background: white;
+      font-weight: 600;
+      color: var(--color-text-base);
+      user-select:none;
+    }
+
+    .expenses-list li {
+      padding: 0.45rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      user-select: text;
+    }
+
+    .expenses-list li:last-child {
+      border-bottom: none;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 2rem;
+      margin-top: 1.5rem;
+      user-select:none;
+    }
+
+    .summary > div {
+      padding: 1.3rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow-light);
+      text-align: center;
+    }
+
+    .summary .label {
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    .summary .value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .login-register-toggle {
+      text-align: right;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      user-select:none;
+    }
+
+    .login-register-toggle button {
+      background: none;
+      border: none;
+      color: var(--color-accent);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0;
+      user-select:none;
+    }
+
+    .login-register-toggle button:hover,
+    .login-register-toggle button:focus-visible {
+      text-decoration: underline;
+      outline-offset: 3px;
+      outline-color: var(--color-primary-dark);
+    }
+
+    /* Scrollbar for expenses list */
+    .expenses-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .expenses-list::-webkit-scrollbar-track {
+      background: #f9fafb;
+      border-radius: 3px;
+    }
+    .expenses-list::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    @media (max-width: 480px) {
+      main {
+        max-width: 100%;
+        padding: 2rem 1rem 3rem;
+      }
+      header {
+        padding: 0 1rem;
+      }
+      header .logo {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Budget & Expense Tracker</h1>
-  <p class="subtitle">Easily manage your monthly budget and track daily expenses.</p>
+  <header role="banner">
+    <div class="logo" aria-label="Budget Tracker">Budget Tracker</div>
+    <nav role="navigation" aria-label="User navigation">
+      <button id="logout-btn" class="hidden" aria-label="Logout">Logout</button>
+    </nav>
+  </header>
 
-  <main>
-    <section class="card" aria-labelledby="monthly-budget-label">
-      <label for="monthly-budget" id="monthly-budget-label">Set your Monthly Budget (RM)</label>
-      <input type="number" id="monthly-budget" min="0" step="0.01" placeholder="Enter your monthly budget in RM" aria-describedby="budget-help" />
-      <small id="budget-help" style="color: var(--color-text-muted); font-weight: 400;">Enter the total budget for the month.</small>
+  <main role="main" aria-live="polite" aria-atomic="true">
+    <!-- Login / Register forms container -->
+    <section id="auth-section" class="card" aria-label="Authentication">
+      <h1 id="auth-title">Sign In</h1>
+      <form id="auth-form" novalidate autocomplete="off">
+        <label for="username-input">Username</label>
+        <input type="text" id="username-input" name="username" autocomplete="username" required aria-required="true" aria-describedby="username-help" minlength="3" maxlength="20" pattern="[A-Za-z0-9]+" placeholder="Enter username (3-20 chars)" />
+        <small id="username-help" class="helper-text">Only letters and numbers, 3 to 20 characters.</small>
+
+        <label for="password-input" style="margin-top:1rem;">Password</label>
+        <input type="password" id="password-input" name="password" autocomplete="current-password" required aria-required="true" minlength="6" maxlength="40" placeholder="Enter password (6+ chars)" />
+
+        <button type="submit" id="auth-submit-btn" aria-live="polite" aria-atomic="true" aria-busy="false">Sign In</button>
+
+        <div class="login-register-toggle" aria-live="polite" aria-atomic="true">
+          <span id="toggle-text">Don't have an account?</span> 
+          <button type="button" id="toggle-auth-btn" aria-label="Switch to register form">Register</button>
+        </div>
+      </form>
+      <p id="auth-feedback" role="alert" aria-live="assertive" style="color: #dc2626; margin-top: 1rem; font-weight: 600; min-height: 20px;"></p>
     </section>
 
-    <section class="card" aria-labelledby="daily-expense-label">
-      <label for="daily-expense" id="daily-expense-label">Add a Daily Expense (RM)</label>
-      <input type="number" id="daily-expense" min="0" step="0.01" placeholder="Enter expense for today in RM" />
-      <button type="button" id="add-expense-button" aria-describedby="expense-help">Add Expense</button>
-      <small id="expense-help" style="color: var(--color-text-muted); font-weight: 400;">Add your daily expenses one by one.</small>
+    <!-- Budget tracker section -->
+    <section id="tracker-section" class="hidden" aria-label="Budget and Expenses Tracker">
+      <h1>Manage Your Budget & Expenses</h1>
+      <p class="subtitle">Easily manage your monthly budget and track daily expenses.</p>
 
-      <ul class="expenses-list" id="expenses-list" aria-live="polite" aria-label="List of added expenses">
-        <!-- daily expenses will appear here -->
-      </ul>
-    </section>
+      <section class="card" aria-labelledby="monthly-budget-label">
+        <label for="monthly-budget" id="monthly-budget-label">Set your Monthly Budget (RM)</label>
+        <input type="number" id="monthly-budget" min="0" step="0.01" placeholder="Enter your monthly budget in RM" aria-describedby="budget-help" />
+        <small id="budget-help" class="helper-text">Enter the total budget for the month.</small>
+      </section>
 
-    <section class="summary" aria-label="Budget summary">
-      <div>
-        <div class="label">Total Expenses</div>
-        <div class="value" id="total-expenses">RM0.00</div>
-      </div>
-      <div>
-        <div class="label">Remaining Budget</div>
-        <div class="value" id="remaining-budget">RM0.00</div>
-      </div>
+      <section class="card" aria-labelledby="daily-expense-label">
+        <label for="daily-expense" id="daily-expense-label">Add a Daily Expense (RM)</label>
+        <input type="number" id="daily-expense" min="0" step="0.01" placeholder="Enter expense for today in RM" />
+        <button type="button" id="add-expense-button" aria-describedby="expense-help">Add Expense</button>
+        <small id="expense-help" class="helper-text">Add your daily expenses one by one.</small>
+
+        <ul class="expenses-list" id="expenses-list" aria-live="polite" aria-label="List of added expenses">
+          <!-- daily expenses will appear here -->
+        </ul>
+      </section>
+
+      <section class="summary" aria-label="Budget summary">
+        <div>
+          <div class="label">Total Expenses</div>
+          <div class="value" id="total-expenses">RM0.00</div>
+        </div>
+        <div>
+          <div class="label">Remaining Budget</div>
+          <div class="value" id="remaining-budget">RM0.00</div>
+        </div>
+      </section>
     </section>
   </main>
 
-<script>
-  (() => {
-    const monthlyBudgetInput = document.getElementById('monthly-budget');
-    const dailyExpenseInput = document.getElementById('daily-expense');
-    const addExpenseButton = document.getElementById('add-expense-button');
-    const expensesList = document.getElementById('expenses-list');
-    const totalExpensesDisplay = document.getElementById('total-expenses');
-    const remainingBudgetDisplay = document.getElementById('remaining-budget');
+  <script>
+    (() => {
+      // Elements
+      const authSection = document.getElementById('auth-section');
+      const trackerSection = document.getElementById('tracker-section');
+      const authForm = document.getElementById('auth-form');
+      const authTitle = document.getElementById('auth-title');
+      const authSubmitBtn = document.getElementById('auth-submit-btn');
+      const toggleAuthBtn = document.getElementById('toggle-auth-btn');
+      const toggleText = document.getElementById('toggle-text');
+      const authFeedback = document.getElementById('auth-feedback');
+      const logoutBtn = document.getElementById('logout-btn');
 
-    let monthlyBudget = 0;
-    let expenses = [];
+      const usernameInput = document.getElementById('username-input');
+      const passwordInput = document.getElementById('password-input');
 
-    function formatCurrency(value) {
-      return 'RM' + value.toFixed(2);
-    }
+      const monthlyBudgetInput = document.getElementById('monthly-budget');
+      const dailyExpenseInput = document.getElementById('daily-expense');
+      const addExpenseButton = document.getElementById('add-expense-button');
+      const expensesList = document.getElementById('expenses-list');
+      const totalExpensesDisplay = document.getElementById('total-expenses');
+      const remainingBudgetDisplay = document.getElementById('remaining-budget');
 
-    function updateSummary() {
-      const totalExpenses = expenses.reduce((a,b) => a + b, 0);
-      const remaining = monthlyBudget - totalExpenses;
+      // Tracking app state
+      let monthlyBudget = 0;
+      let expenses = [];
+      let currentUser = null;
+      let registering = false;
 
-      totalExpensesDisplay.textContent = formatCurrency(totalExpenses);
-      remainingBudgetDisplay.textContent = formatCurrency(remaining >= 0 ? remaining : 0);
-      // Highlight if over budget
-      remainingBudgetDisplay.style.color = remaining < 0 ? '#dc2626' : 'var(--color-primary)';
-    }
+      // Util: Simple hash (not secure, for demo)
+      function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0;
+        }
+        return hash.toString();
+      }
 
-    function renderExpenses() {
-      expensesList.innerHTML = '';
-      expenses.forEach((expense, idx) => {
-        const li = document.createElement('li');
-        li.textContent = formatCurrency(expense);
-        expensesList.appendChild(li);
+      // Storage keys for users: store in localStorage
+      // users stored as {username: {passwordHash: string}}
+      function loadUsers() {
+        try {
+          return JSON.parse(localStorage.getItem('bt_users')) || {};
+        } catch {
+          return {};
+        }
+      }
+      function saveUsers(users) {
+        localStorage.setItem('bt_users', JSON.stringify(users));
+      }
+
+      // Data storage per user
+      function saveUserData(username, budget, expensesArr) {
+        const dataKey = 'bt_data_' + username;
+        const data = { budget, expenses: expensesArr };
+        localStorage.setItem(dataKey, JSON.stringify(data));
+      }
+
+      function loadUserData(username) {
+        try {
+          const dataKey = 'bt_data_' + username;
+          const dataJson = localStorage.getItem(dataKey);
+          if (!dataJson) return null;
+          return JSON.parse(dataJson);
+        } catch {
+          return null;
+        }
+      }
+
+      // Format currency RM
+      function formatCurrency(value) {
+        return 'RM' + value.toFixed(2);
+      }
+
+      // Render expense list
+      function renderExpenses() {
+        expensesList.innerHTML = '';
+        expenses.forEach((expense, idx) => {
+          const li = document.createElement('li');
+          li.textContent = formatCurrency(expense);
+          expensesList.appendChild(li);
+        });
+      }
+
+      // Update summary display
+      function updateSummary() {
+        const totalExpenses = expenses.reduce((a,b) => a + b, 0);
+        const remaining = monthlyBudget - totalExpenses;
+
+        totalExpensesDisplay.textContent = formatCurrency(totalExpenses);
+        remainingBudgetDisplay.textContent = formatCurrency(remaining >= 0 ? remaining : 0);
+        // Highlight remaining in red if over budget
+        remainingBudgetDisplay.style.color = remaining < 0 ? '#dc2626' : 'var(--color-primary)';
+      }
+
+      // Load data into tracker inputs and UI
+      function loadTrackerData(budget, expensesArr) {
+        monthlyBudget = budget || 0;
+        expenses = Array.isArray(expensesArr) ? expensesArr : [];
+
+        monthlyBudgetInput.value = monthlyBudget > 0 ? monthlyBudget.toFixed(2) : '';
+        renderExpenses();
+        updateSummary();
+      }
+
+      // Switch UI between auth and tracker
+      function showTracker() {
+        authSection.classList.add('hidden');
+        trackerSection.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        monthlyBudgetInput.focus();
+      }
+      function showAuth() {
+        authSection.classList.remove('hidden');
+        trackerSection.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+        usernameInput.focus();
+      }
+
+      // Clear auth feedback
+      function clearFeedback() {
+        authFeedback.textContent = '';
+      }
+
+      // Render auth UI for login or register
+      function renderAuthUI() {
+        if (registering) {
+          authTitle.textContent = 'Create Account';
+          authSubmitBtn.textContent = 'Register';
+          toggleText.textContent = 'Already have an account?';
+          toggleAuthBtn.textContent = 'Sign In';
+          toggleAuthBtn.setAttribute('aria-label', 'Switch to login form');
+          clearFeedback();
+        } else {
+          authTitle.textContent = 'Sign In';
+          authSubmitBtn.textContent = 'Sign In';
+          toggleText.textContent = "Don't have an account?";
+          toggleAuthBtn.textContent = 'Register';
+          toggleAuthBtn.setAttribute('aria-label', 'Switch to register form');
+          clearFeedback();
+        }
+        authForm.reset();
+      }
+
+      // Validate username and password input on form
+      function validateAuthInputs() {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        if (!username.match(/^[A-Za-z0-9]{3,20}$/)) {
+          return 'Username must be 3-20 letters or numbers only.';
+        }
+        if (password.length < 6) {
+          return 'Password must be at least 6 characters long.';
+        }
+        return null;
+      }
+
+      // Authenticate user login
+      function authenticateUser(username, password) {
+        const users = loadUsers();
+        if (!users[username]) {
+          return false;
+        }
+        const passwordHash = simpleHash(password);
+        return users[username].passwordHash === passwordHash;
+      }
+
+      // Register new user
+      function registerUser(username, password) {
+        const users = loadUsers();
+        if (users[username]) {
+          return false;
+        }
+        users[username] = { passwordHash: simpleHash(password) };
+        saveUsers(users);
+        return true;
+      }
+
+      // Login handler
+      authForm.addEventListener('submit', e => {
+        e.preventDefault();
+        clearFeedback();
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        const validationError = validateAuthInputs();
+        if (validationError) {
+          authFeedback.textContent = validationError;
+          return;
+        }
+
+        if (registering) {
+          // Register flow
+          const success = registerUser(username, password);
+          if (success) {
+            authFeedback.style.color = 'green';
+            authFeedback.textContent = 'Registered successfully! Please sign in.';
+            registering = false;
+            renderAuthUI();
+          } else {
+            authFeedback.style.color = '#dc2626';
+            authFeedback.textContent = 'Username already taken. Try another.';
+          }
+        } else {
+          // Login flow
+          const authenticated = authenticateUser(username, password);
+          if (authenticated) {
+            currentUser = username;
+            authFeedback.textContent = '';
+            authForm.reset();
+            // Load user data from storage and show tracker
+            const data = loadUserData(currentUser);
+            if (data) {
+              loadTrackerData(data.budget, data.expenses);
+            } else {
+              loadTrackerData(0, []);
+            }
+            showTracker();
+          } else {
+            authFeedback.style.color = '#dc2626';
+            authFeedback.textContent = 'Invalid username or password.';
+          }
+        }
       });
-    }
 
-    monthlyBudgetInput.addEventListener('input', e => {
-      const val = parseFloat(e.target.value);
-      monthlyBudget = isNaN(val) || val < 0 ? 0 : val;
-      updateSummary();
-    });
+      // Toggle between login and register views
+      toggleAuthBtn.addEventListener('click', () => {
+        registering = !registering;
+        authFeedback.textContent = '';
+        renderAuthUI();
+      });
 
-    addExpenseButton.addEventListener('click', () => {
-      const val = parseFloat(dailyExpenseInput.value);
-      if (isNaN(val) || val <= 0) {
-        alert('Please enter a positive number for daily expense.');
+      // Logout handler
+      logoutBtn.addEventListener('click', () => {
+        currentUser = null;
+        monthlyBudget = 0;
+        expenses = [];
+        // Clear inputs + UI
+        loadTrackerData(0, []);
+        showAuth();
+        authFeedback.style.color = '#dc2626';
+        authFeedback.textContent = 'You have been logged out.';
+      });
+
+      // Input handlers for budget and expenses - persist data live for currentUser if logged in
+      monthlyBudgetInput.addEventListener('input', e => {
+        if (!currentUser) return;
+        const val = parseFloat(e.target.value);
+        monthlyBudget = isNaN(val) || val < 0 ? 0 : val;
+        updateSummary();
+        saveUserData(currentUser, monthlyBudget, expenses);
+      });
+
+      addExpenseButton.addEventListener('click', () => {
+        if (!currentUser) return;
+
+        const val = parseFloat(dailyExpenseInput.value);
+        if (isNaN(val) || val <= 0) {
+          alert('Please enter a positive number for daily expense.');
+          dailyExpenseInput.focus();
+          return;
+        }
+        expenses.push(val);
+        dailyExpenseInput.value = '';
         dailyExpenseInput.focus();
-        return;
-      }
-      expenses.push(val);
-      dailyExpenseInput.value = '';
-      dailyExpenseInput.focus();
-      renderExpenses();
-      updateSummary();
-    });
+        renderExpenses();
+        updateSummary();
+        saveUserData(currentUser, monthlyBudget, expenses);
+      });
 
-    dailyExpenseInput.addEventListener('keypress', (e) => {
-      if(e.key === 'Enter') {
-        addExpenseButton.click();
-      }
-    });
+      dailyExpenseInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') {
+          addExpenseButton.click();
+        }
+      });
 
-  })();
-</script>
+      // Initialize UI to login
+      renderAuthUI();
+      showAuth();
+    })();
+  </script>
 </body>
 </html>
 
