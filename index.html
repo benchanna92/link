@@ -300,7 +300,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e03756c3-9144-4f2d-be9e-cb41a1b96b45.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/688b1fe5-1e69-4c06-9d8f-be3db3e1d8e7.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -359,9 +359,10 @@
 
 <script>
   (function() {
-    const DEALER_ACCESS_CODE = 'dealer';
-    const USER_ACCESS_CODE = 'user';
-    const VALID_CODES = [DEALER_ACCESS_CODE, USER_ACCESS_CODE];
+    // Access codes allowed
+    const DEALER_ACCESS_CODES = ['dealer', 'dealer2'];  // multiple dealer codes can be added here
+    const USER_ACCESS_CODE = 'user'; // For regular user, no dealer discount
+    const VALID_CODES = [...DEALER_ACCESS_CODES, USER_ACCESS_CODE];
 
     const form = document.getElementById('access-form');
     const input = document.getElementById('access-code');
@@ -450,7 +451,7 @@
         return;
       }
 
-      isDealer = code === DEALER_ACCESS_CODE;
+      isDealer = DEALER_ACCESS_CODES.includes(code);
 
       message.textContent = '';
       form.hidden = true;
@@ -477,7 +478,7 @@
             tdPrice.textContent = "RM" + item.price.toFixed(2);
 
             const tdDealerPrice = document.createElement('td');
-            // Calculate dealer price with 30% deduction
+            // Calculate dealer price with 30% deduction if dealer access code used
             const dealerPrice = isDealer ? item.price * 0.7 : item.price;
             tdDealerPrice.textContent = "RM" + dealerPrice.toFixed(2);
 
@@ -495,8 +496,7 @@
     });
 
     // Access codes allowed
-    const VALID_CODES = [DEALER_ACCESS_CODE, USER_ACCESS_CODE];
-    const USER_ACCESS_CODE = 'user'; // For normal user access to show prices without dealer discount
+    const VALID_CODES = [...DEALER_ACCESS_CODES, USER_ACCESS_CODE];
   })();
 </script>
 
