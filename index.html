@@ -372,7 +372,63 @@
 
     let isDealer = false;
 
-    // Base price data for brands
+    submitBtn.disabled = true;
+
+    input.addEventListener('input', () => {
+      const val = input.value.trim();
+      submitBtn.disabled = val.length === 0;
+      message.textContent = '';
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const codeInput = input.value.trim().toLowerCase();
+
+      if (!VALID_CODES.includes(codeInput)) {
+        message.textContent = 'Invalid access code, please try again.';
+        input.focus();
+        return;
+      }
+
+      isDealer = (codeInput === DEALER_ACCESS_CODE);
+
+      message.textContent = '';
+      form.hidden = true;
+      contentContainer.style.display = 'flex';
+      pricelistCard.hidden = true;
+      modelSelect.value = '';
+    });
+
+    modelSelect.addEventListener('change', () => {
+      const brand = modelSelect.value;
+      pricelistTableBody.innerHTML = '';
+
+      if (priceLists.hasOwnProperty(brand)) {
+        const list = priceLists[brand];
+        if (list.length === 0) {
+          pricelistTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
+        } else {
+          list.forEach(item => {
+            const tr = document.createElement('tr');
+
+            const tdModel = document.createElement('td');
+            tdModel.textContent = item.model;
+            tr.appendChild(tdModel);
+
+            const tdPrice = document.createElement('td');
+            const priceToShow = isDealer ? (item.price * 0.7) : item.price;
+            tdPrice.textContent = "RM" + priceToShow.toFixed(2);
+            tr.appendChild(tdPrice);
+
+            pricelistTableBody.appendChild(tr);
+          });
+        }
+        pricelistCard.hidden = false;
+      } else {
+        pricelistCard.hidden = true;
+      }
+    });
+
     const priceLists = {
       "OPPO": [
         {model: "OPPO A16", price: 100},
@@ -430,66 +486,6 @@
       "HONOR": []
     };
 
-    submitBtn.disabled = true;
-
-    input.addEventListener('input', () => {
-      const val = input.value.trim();
-      submitBtn.disabled = val.length === 0;
-      message.textContent = '';
-    });
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const codeInput = input.value.trim().toLowerCase();
-
-      if (!VALID_CODES.includes(codeInput)) {
-        message.textContent = 'Invalid access code, please try again.';
-        input.focus();
-        return;
-      }
-
-      isDealer = (codeInput === DEALER_ACCESS_CODE); // dealer pricing only for dealer code
-
-      message.textContent = '';
-      form.hidden = true;
-      contentContainer.style.display = 'flex';
-      pricelistCard.hidden = true;
-      modelSelect.value = '';
-    });
-
-    modelSelect.addEventListener('change', () => {
-      const brand = modelSelect.value;
-      pricelistTableBody.innerHTML = '';
-      if (priceLists.hasOwnProperty(brand)) {
-        const list = priceLists[brand];
-        if (list.length === 0) {
-          pricelistTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
-        } else {
-          list.forEach(item => {
-            const tr = document.createElement('tr');
-            const tdModel = document.createElement('td');
-            tdModel.textContent = item.model;
-
-            const tdPrice = document.createElement('td');
-            // Show dealer price if dealer, else customer price
-            const priceToShow = isDealer ? (item.price * 0.7) : item.price;
-            tdPrice.textContent = "RM" + priceToShow.toFixed(2);
-
-            tr.appendChild(tdModel);
-            tr.appendChild(tdPrice);
-
-            pricelistTableBody.appendChild(tr);
-          });
-        }
-        pricelistCard.hidden = false;
-      } else {
-        pricelistCard.hidden = true;
-      }
-    });
-
-    const DEALER_ACCESS_CODE = 'dealer';
-    const CUSTOMER_ACCESS_CODE = 'zuucaster';
-    const VALID_CODES = [DEALER_ACCESS_CODE, CUSTOMER_ACCESS_CODE];
   });
 </script>
 
@@ -500,7 +496,7 @@
     border: 0 !important;
     clip: rect(1px,1px,1px,1px) !important;
     -webkit-clip-path: inset(50%) !important;
-    clip-path: inset(50%) !important;
+            clip-path: inset(50%) !important;
     height: 1px !important;
     margin: -1px !important;
     overflow: hidden !important;
