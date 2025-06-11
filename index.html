@@ -214,7 +214,7 @@
     font-weight: 600;
     color: #374151;
   }
-  thead th:nth-child(3) {
+  thead th:nth-child(2), thead th:nth-child(3) {
     text-align: right;
   }
 
@@ -228,7 +228,7 @@
     padding: 0.75rem 1rem;
     color: #4b5563;
   }
-  tbody td:nth-child(3) {
+  tbody td:nth-child(2), tbody td:nth-child(3) {
     text-align: right;
   }
 
@@ -291,7 +291,7 @@
       text-align: left;
     }
     tbody td:nth-of-type(1)::before { content: "Model"; }
-    tbody td:nth-of-type(2)::before { content: "Price (RM)"; }
+    tbody td:nth-of-type(2)::before { content: "Customer Price (RM)"; }
     tbody td:nth-of-type(3)::before { content: "Dealer Price (RM)"; text-align:right;}
   }
 </style>
@@ -300,7 +300,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://placehold.co/32x32/000000/ffffff?text=Z" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f609eda9-6f1a-41a8-aaae-6c05410b223f.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -338,7 +338,7 @@
         <thead>
           <tr>
             <th scope="col">Model</th>
-            <th scope="col">Price (RM)</th>
+            <th scope="col">Customer Price (RM)</th>
             <th scope="col">Dealer Price (RM)</th>
           </tr>
         </thead>
@@ -359,10 +359,9 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Access codes allowed
-    const DEALER_ACCESS_CODES = ['dealer', 'dealer2'];
-    const USER_ACCESS_CODE = 'user'; // regular user access no discount
-    const VALID_CODES = [...DEALER_ACCESS_CODES, USER_ACCESS_CODE];
+    const DEALER_ACCESS_CODE = 'dealer';
+    const CUSTOMER_ACCESS_CODE = 'zuucaster';
+    const VALID_CODES = [DEALER_ACCESS_CODE, CUSTOMER_ACCESS_CODE];
 
     const form = document.getElementById('access-form');
     const input = document.getElementById('access-code');
@@ -433,25 +432,27 @@
       "HONOR": []
     };
 
-    // Enable submit if input not empty
+    // Initially disable button
+    submitBtn.disabled = true;
+
+    // Enable submit button when input is not empty
     input.addEventListener('input', () => {
-      const value = input.value.trim();
-      submitBtn.disabled = value.length === 0;
+      const val = input.value.trim();
+      submitBtn.disabled = val.length === 0;
       message.textContent = '';
     });
 
-    // Handle form submit and determine dealer or user
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const code = input.value.trim().toLowerCase();
+      const codeInput = input.value.trim().toLowerCase();
 
-      if (!VALID_CODES.includes(code)) {
+      if (!VALID_CODES.includes(codeInput)) {
         message.textContent = 'Invalid access code, please try again.';
         input.focus();
         return;
       }
 
-      isDealer = DEALER_ACCESS_CODES.includes(code);
+      isDealer = (codeInput === DEALER_ACCESS_CODE); // dealer gets dealer pricing
 
       message.textContent = '';
       form.hidden = true;
@@ -460,7 +461,6 @@
       modelSelect.value = '';
     });
 
-    // On model select change, update pricelist
     modelSelect.addEventListener('change', () => {
       const brand = modelSelect.value;
       pricelistTableBody.innerHTML = '';
@@ -474,15 +474,15 @@
             const tdModel = document.createElement('td');
             tdModel.textContent = item.model;
 
-            const tdPrice = document.createElement('td');
-            tdPrice.textContent = "RM" + item.price.toFixed(2);
+            const tdCustomerPrice = document.createElement('td');
+            tdCustomerPrice.textContent = "RM" + item.price.toFixed(2);
 
             const tdDealerPrice = document.createElement('td');
-            const dealerPrice = isDealer ? item.price * 0.7 : item.price;
-            tdDealerPrice.textContent = "RM" + dealerPrice.toFixed(2);
+            const dealerPrice = (item.price * 0.7);
+            tdDealerPrice.textContent = isDealer ? "RM" + dealerPrice.toFixed(2) : 'N/A';
 
             tr.appendChild(tdModel);
-            tr.appendChild(tdPrice);
+            tr.appendChild(tdCustomerPrice);
             tr.appendChild(tdDealerPrice);
 
             pricelistTableBody.appendChild(tr);
@@ -515,3 +515,4 @@
 </style>
 </body>
 </html>
+
