@@ -231,41 +231,12 @@
     transition: background-color 0.3s ease;
   }
 
-  /* Timetable card */
-  .timetable-card {
-    background: #f9fafb;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    padding: 2rem;
-  }
-
-  .timetable-card h2 {
-    font-weight: 700;
-    font-size: 2rem;
-    color: #111827;
-    margin-bottom: 1rem;
+  /* Notes section */
+  .notes {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
     text-align: center;
-  }
-
-  .timetable {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-  }
-
-  .timetable th,
-  .timetable td {
-    border: 1px solid #d1d5db;
-    padding: 0.75rem 1rem;
-    text-align: center;
-    color: #4b5563;
-    font-weight: 600;
-    background: white;
-  }
-
-  .timetable thead th {
-    background: #111827;
-    color: white;
   }
 
   /* Responsive */
@@ -314,34 +285,6 @@
     }
     tbody td:nth-of-type(1)::before { content: "Item"; }
     tbody td:nth-of-type(2)::before { content: "Price"; }
-    /* Timetable responsive */
-    .timetable th,
-    .timetable td {
-      display: block;
-      text-align: right;
-      border: none;
-      padding: 0.4rem 1rem 0.4rem 50%;
-      position: relative;
-    }
-    .timetable td::before {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-weight: 600;
-      color: #374151;
-      white-space: nowrap;
-      content: attr(data-label);
-      text-align: left;
-    }
-    .timetable tr {
-      border-bottom: 2px solid #e5e7eb;
-      margin-bottom: 1rem;
-      display: block;
-    }
-    .timetable thead {
-      display: none;
-    }
   }
 </style>
 </head>
@@ -349,7 +292,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/540f2812-5f27-489c-9d81-dd3203850649.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://placehold.co/32x32/000000/ffffff?text=Z" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -395,58 +338,13 @@
         </tbody>
       </table>
       <p id="pricelist-description" class="sr-only">Unlock price list for the selected brand.</p>
+      <div class="notes">
+        <p>All processes need 1-14 days depending on available CPU to replace.</p>
+        <p>No refunds after processing.</p>
+        <p>No cancellations after service is in progress.</p>
+      </div>
     </section>
 
-    <section class="timetable-card" aria-labelledby="timetable-title">
-      <h2 id="timetable-title">Unlock Service Time Table</h2>
-      <table class="timetable" role="table" aria-describedby="timetable-description">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Open</th>
-            <th>Close</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td data-label="Day">Monday</td>
-            <td data-label="Open">9:00 AM</td>
-            <td data-label="Close">6:00 PM</td>
-          </tr>
-          <tr>
-            <td data-label="Day">Tuesday</td>
-            <td data-label="Open">9:00 AM</td>
-            <td data-label="Close">6:00 PM</td>
-          </tr>
-          <tr>
-            <td data-label="Day">Wednesday</td>
-            <td data-label="Open">9:00 AM</td>
-            <td data-label="Close">6:00 PM</td>
-          </tr>
-          <tr>
-            <td data-label="Day">Thursday</td>
-            <td data-label="Open">9:00 AM</td>
-            <td data-label="Close">6:00 PM</td>
-          </tr>
-          <tr>
-            <td data-label="Day">Friday</td>
-            <td data-label="Open">9:00 AM</td>
-            <td data-label="Close">6:00 PM</td>
-          </tr>
-          <tr>
-            <td data-label="Day">Saturday</td>
-            <td data-label="Open">10:00 AM</td>
-            <td data-label="Close">4:00 PM</td>
-          </tr>
-          <tr>
-            <td data-label="Day">Sunday</td>
-            <td data-label="Open">Closed</td>
-            <td data-label="Close">Closed</td>
-          </tr>
-        </tbody>
-      </table>
-      <p id="timetable-description" class="sr-only">Service availability hours each day</p>
-    </section>
   </section>
 </main>
 
@@ -481,7 +379,18 @@
         {model: "REALME 13", price: "RM200"},
         {model: "REALME 12 PRO", price: "RM250"}
       ],
-      "VIVO": [],
+      "VIVO": [
+        {model: "VIVO Y03", price: "RM170"},
+        {model: "VIVO Y20", price: "RM70"},
+        {model: "VIVO Y16", price: "RM130"},
+        {model: "VIVO Y36", price: "RM180"},
+        {model: "VIVO Y27", price: "RM200"},
+        {model: "VIVO Y28S", price: "RM230"},
+        {model: "VIVO Y77", price: "RM200"},
+        {model: "VIVO Y30", price: "RM200"},
+        {model: "VIVO V23", price: "RM200"},
+        {model: "VIVO V40 LITE", price: "RM350"}
+      ],
       "HONOR": []
     };
 
