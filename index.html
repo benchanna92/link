@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Phone Software Repair Auto-Reply Box</title>
+<title>Phone Software Repair Auto-Reply Box with Case Number & WhatsApp Link</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
@@ -26,8 +26,8 @@
     position: fixed;
     bottom: 24px;
     right: 24px;
-    width: 320px;
-    max-width: 90vw;
+    width: 360px;
+    max-width: 95vw;
     background: #20232a;
     color: #e1e4ea;
     border-radius: 16px;
@@ -37,6 +37,7 @@
     overflow: hidden;
     font-size: 14px;
     user-select: none;
+    z-index: 1000;
   }
 
   .auto-reply-header {
@@ -94,6 +95,7 @@
     padding: 12px 16px;
     border-radius: 16px;
     line-height: 1.4;
+    word-wrap: break-word;
   }
 
   .message.user {
@@ -109,6 +111,27 @@
     align-self: flex-start;
     border-bottom-left-radius: 4px;
     box-shadow: 0 2px 6px rgba(101,114,133,0.5);
+  }
+
+  .whatsapp-link {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 14px;
+    background: #25D366;
+    color: white;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    font-size: 13px;
+    box-shadow: 0 4px 6px rgb(37 211 102 / 0.4);
+    transition: background-color 0.3s ease;
+  }
+  .whatsapp-link:hover,
+  .whatsapp-link:focus {
+    background-color: #1ebe57;
+    outline: none;
   }
 
   .chat-input-area {
@@ -183,6 +206,9 @@
     const closeBtn = document.querySelector('.close-btn');
     const box = document.querySelector('.auto-reply-box');
 
+    // Phone number for WhatsApp (international format without +)
+    const whatsappNumber = '60178040403';
+
     // Predefined auto-reply rules - simple matching keywords with replies
     const autoReplies = [
       {
@@ -218,7 +244,7 @@
     // Default reply if no keyword matched
     const defaultReply = "Thanks for reaching out! Can you please provide more details about your phone issue?";
 
-    // Helper to sanitize input and make case insensitive
+    // Sanitize and lowercase text for matching
     function textIncludesKeywords(text, keywords) {
       text = text.toLowerCase();
       return keywords.some(keyword => text.includes(keyword));
@@ -238,43 +264,81 @@
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    // On form submit: user sends message, then auto reply triggered
+    // Generate Case Number: format CASE-YYYYMMDD-HHMMSS+random4digits
+    function generateCaseNumber() {
+      const dt = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      const y = dt.getFullYear();
+      const m = pad(dt.getMonth() + 1);
+      const d = pad(dt.getDate());
+      const hh = pad(dt.getHours());
+      const mm = pad(dt.getMinutes());
+      const ss = pad(dt.getSeconds());
+      const randomDigits = Math.floor(Math.random() * 9000 + 1000); // 4 digit random number
+      return `CASE-${y}${m}${d}-${hh}${mm}${ss}-${randomDigits}`;
+    }
+
+    // Create WhatsApp link element with prefilled message
+    function createWhatsAppLink(caseNumber, userMessage) {
+      const baseURL = 'https://wa.me/' + whatsappNumber;
+      // Compose message text - escape & encode URI
+      const text = `Hello, I have created a repair case.\nCase Number: ${caseNumber}\nIssue: ${userMessage}`;
+      const url = `${baseURL}?text=${encodeURIComponent(text)}`;
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.className = 'whatsapp-link';
+      link.textContent = 'Send Case Details to WhatsApp';
+      link.setAttribute('aria-label', 'Send repair case details to WhatsApp');
+      return link;
+    }
+
+    // On form submit: user sends message, auto reply with case number and WhatsApp link
     chatForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const userMessage = chatInput.value.trim();
       if (!userMessage) return;
 
-      // Append user message
       appendMessage(createMessage(userMessage, 'user'));
 
-      // Clear input
       chatInput.value = '';
-      chatInput.disabled = true; // temporarily disable input during reply
+      chatInput.disabled = true;
 
-      // Simulate typing delay for auto-reply
+      const caseNumber = generateCaseNumber();
+
       setTimeout(() => {
-        let replied = false;
+        let replyText = '';
         for (const rule of autoReplies) {
           if (textIncludesKeywords(userMessage, rule.keywords)) {
-            appendMessage(createMessage(rule.reply, 'auto-reply'));
-            replied = true;
+            replyText = rule.reply;
             break;
           }
         }
-        if (!replied) {
-          appendMessage(createMessage(defaultReply, 'auto-reply'));
+        if (!replyText) {
+          replyText = defaultReply;
         }
+
+        // Append reply message with case number included
+        appendMessage(createMessage(replyText, 'auto-reply'));
+        appendMessage(createMessage(`Your Case Number: ${caseNumber}`, 'auto-reply'));
+
+        // Append WhatsApp link after messages
+        const waLink = createWhatsAppLink(caseNumber, userMessage);
+        chatWindow.appendChild(waLink);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
         chatInput.disabled = false;
         chatInput.focus();
       }, 900);
     });
 
-    // Close button hides the chat box
+    // Close button hides chat box
     closeBtn.addEventListener('click', () => {
       box.style.display = 'none';
     });
 
-    // Initialize with a greeting auto message
+    // Initial greeting message
     appendMessage(createMessage("Hi! I'm your phone repair assistant. How can I help you today?", 'auto-reply'));
   })();
 </script>
