@@ -358,9 +358,9 @@
 </main>
 
 <script>
-  (function() {
+  document.addEventListener('DOMContentLoaded', () => {
     // Access codes allowed
-    const DEALER_ACCESS_CODES = ['dealer', 'dealer2'];  // multiple dealer codes
+    const DEALER_ACCESS_CODES = ['dealer', 'dealer2'];
     const USER_ACCESS_CODE = 'user'; // regular user access no discount
     const VALID_CODES = [...DEALER_ACCESS_CODES, USER_ACCESS_CODE];
 
@@ -433,12 +433,14 @@
       "HONOR": []
     };
 
+    // Enable submit if input not empty
     input.addEventListener('input', () => {
       const value = input.value.trim();
       submitBtn.disabled = value.length === 0;
       message.textContent = '';
     });
 
+    // Handle form submit and determine dealer or user
     form.addEventListener('submit', e => {
       e.preventDefault();
       const code = input.value.trim().toLowerCase();
@@ -458,6 +460,7 @@
       modelSelect.value = '';
     });
 
+    // On model select change, update pricelist
     modelSelect.addEventListener('change', () => {
       const brand = modelSelect.value;
       pricelistTableBody.innerHTML = '';
@@ -490,8 +493,8 @@
         pricelistCard.hidden = true;
       }
     });
-
-  </script>
+  });
+</script>
 
 <style>
   /* Visually hidden utility for accessibility */
