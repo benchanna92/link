@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Phone Software Repair Auto-Reply Box with Case Number & WhatsApp Link</title>
+<title>Phone Repair Auto-Reply Chat with GPT Simulation</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
   * {
     box-sizing: border-box;
   }
-
   body {
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -18,14 +17,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
   }
-
-  /* Auto Reply Box Container */
-  .auto-reply-box {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
+  .chatbox {
     width: 360px;
     max-width: 95vw;
     background: #20232a;
@@ -34,13 +28,12 @@
     box-shadow: 0 12px 32px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
+    user-select: none;
     overflow: hidden;
     font-size: 14px;
-    user-select: none;
     z-index: 1000;
   }
-
-  .auto-reply-header {
+  .header {
     background: #24292e;
     padding: 16px;
     font-weight: 600;
@@ -50,14 +43,12 @@
     justify-content: space-between;
     align-items: center;
   }
-
   .close-btn {
     background: transparent;
     border: none;
     color: #61dafb;
     font-size: 22px;
     cursor: pointer;
-    line-height: 1;
     padding: 0;
     user-select: none;
     transition: color 0.3s ease;
@@ -67,28 +58,26 @@
     color: #21a1f1;
     outline: none;
   }
-
-  .chat-window {
+  .messages {
     background: #20232a;
     padding: 16px;
     flex-grow: 1;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #61dafb transparent;
   }
-  .chat-window::-webkit-scrollbar {
+  .messages::-webkit-scrollbar {
     width: 8px;
   }
-  .chat-window::-webkit-scrollbar-thumb {
+  .messages::-webkit-scrollbar-thumb {
     background-color: #61dafb;
     border-radius: 4px;
   }
-  .chat-window::-webkit-scrollbar-track {
+  .messages::-webkit-scrollbar-track {
     background: transparent;
   }
-
   .message {
     max-width: 80%;
     margin-bottom: 12px;
@@ -97,7 +86,6 @@
     line-height: 1.4;
     word-wrap: break-word;
   }
-
   .message.user {
     background: #61dafb;
     color: #20232a;
@@ -105,241 +93,276 @@
     border-bottom-right-radius: 4px;
     box-shadow: 0 2px 6px rgba(97,218,251,0.5);
   }
-
-  .message.auto-reply {
+  .message.gpt {
     background: #2d333b;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
     box-shadow: 0 2px 6px rgba(101,114,133,0.5);
   }
-
   .whatsapp-link {
     display: inline-block;
-    margin-top: 8px;
-    padding: 8px 14px;
+    margin: 12px auto 16px auto;
+    padding: 10px 20px;
     background: #25D366;
     color: white;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 24px;
     cursor: pointer;
     text-decoration: none;
     user-select: none;
-    font-size: 13px;
-    box-shadow: 0 4px 6px rgb(37 211 102 / 0.4);
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgb(37 211 102 / 0.5);
     transition: background-color 0.3s ease;
+    max-width: 80%;
+    text-align: center;
   }
   .whatsapp-link:hover,
   .whatsapp-link:focus {
     background-color: #1ebe57;
     outline: none;
   }
-
-  .chat-input-area {
+  .controls {
     display: flex;
     border-top: 1px solid #3c4048;
     background: #24292e;
+    padding: 8px;
   }
-
-  .chat-input-area input[type="text"] {
+  .controls input[type="text"] {
     flex-grow: 1;
     border: none;
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-size: 14px;
-    border-radius: 0 0 0 16px;
+    border-radius: 16px;
     color: #e1e4ea;
     background: #20232a;
   }
-  .chat-input-area input[type="text"]::placeholder {
+  .controls input[type="text"]::placeholder {
     color: #6b7280;
   }
-  .chat-input-area input[type="text"]:focus {
+  .controls input[type="text"]:focus {
     outline: none;
     background: #24292e;
   }
-
-  .chat-input-area button {
+  .controls button {
+    margin-left: 8px;
     background: #61dafb;
     border: none;
     color: #20232a;
     font-weight: 600;
-    padding: 0 24px;
+    padding: 0 20px;
     font-size: 14px;
     cursor: pointer;
-    border-radius: 0 0 16px 0;
+    border-radius: 16px;
     transition: background-color 0.3s ease;
   }
-
-  .chat-input-area button:hover,
-  .chat-input-area button:focus {
+  .controls button:hover,
+  .controls button:focus {
     background: #21a1f1;
     outline: none;
   }
-
-  /* Responsive */
-  @media (max-width: 400px) {
-    .auto-reply-box {
+  /* Bottom finish button */
+  .finish-btn {
+    margin: 0 auto 16px auto;
+    background: #ff6b6b;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 12px 24px;
+    font-size: 15px;
+    border-radius: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(255,107,107,0.6);
+    transition: background-color 0.3s ease;
+    user-select: none;
+    display: none;
+  }
+  .finish-btn:hover,
+  .finish-btn:focus {
+    background: #e85c5c;
+    outline: none;
+  }
+  @media (max-width: 420px) {
+    .chatbox {
       width: 95vw;
-      bottom: 12px;
-      right: 12px;
     }
   }
 </style>
 </head>
 <body>
-  <div class="auto-reply-box" role="region" aria-label="Phone repair auto reply chatbox" aria-live="polite" aria-atomic="true">
-    <div class="auto-reply-header">
-      <span>Phone Repair Support</span>
-      <button class="close-btn" aria-label="Close chatbox" title="Close chatbox">&times;</button>
-    </div>
-    <div class="chat-window" id="chatWindow" role="log" aria-live="polite" aria-relevant="additions"></div>
-    <form class="chat-input-area" id="chatForm" aria-label="Send message form">
-      <input type="text" id="chatInput" aria-label="Type your message" placeholder="Type your message..." autocomplete="off" required />
+  <section class="chatbox" role="region" aria-label="Phone Repair chat assistant" aria-live="polite" aria-atomic="true">
+    <header class="header">
+      <h1 style="margin:0; font-size:1.25rem; color:#61dafb;">Phone Repair Assistant</h1>
+      <button class="close-btn" aria-label="Close Chatbox" title="Close Chatbox">&times;</button>
+    </header>
+    <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <form class="controls" id="chatForm" aria-label="Send message form">
+      <input type="text" id="inputField" autocomplete="off" placeholder="Type your message..." aria-required="true" aria-label="Message input" />
       <button type="submit" aria-label="Send message">Send</button>
     </form>
-  </div>
+    <button class="finish-btn" id="finishBtn" aria-label="Finish conversation and get case code">Finish Conversation</button>
+  </section>
 
 <script>
-  (function() {
-    const chatWindow = document.getElementById('chatWindow');
-    const chatForm = document.getElementById('chatForm');
-    const chatInput = document.getElementById('chatInput');
+  (function(){
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('inputField');
+    const finishBtn = document.getElementById('finishBtn');
     const closeBtn = document.querySelector('.close-btn');
-    const box = document.querySelector('.auto-reply-box');
-
-    // Phone number for WhatsApp (international format without +)
     const whatsappNumber = '60178040403';
 
-    // Predefined auto-reply rules - simple matching keywords with replies
-    const autoReplies = [
-      {
-        keywords: ['screen', 'crack', 'broken', 'display'],
-        reply: "If your phone screen is cracked or broken, we can replace it quickly with high-quality parts. Would you like to schedule a repair?"
-      },
-      {
-        keywords: ['battery', 'charge', 'power', 'drain'],
-        reply: "Battery issues? We offer fast battery replacement and diagnostic services. How can I help you with your battery today?"
-      },
-      {
-        keywords: ['software', 'update', 'error', 'crash', 'freeze'],
-        reply: "Software problems can often be fixed with a system reset or update. Can you describe the issue you're experiencing?"
-      },
-      {
-        keywords: ['water', 'liquid', 'damage', 'wet'],
-        reply: "Water damage is serious. We advise you to stop using the phone and bring it in for an immediate assessment."
-      },
-      {
-        keywords: ['price', 'cost', 'repair', 'quote', 'estimate'],
-        reply: "Pricing depends on the specific repair needed. Can you please specify the problem or your phone model?"
-      },
-      {
-        keywords: ['hello', 'hi', 'hey', 'greetings'],
-        reply: "Hello! How can we assist you with your phone repair needs today?"
-      },
-      {
-        keywords: ['thank', 'thanks', 'great', 'good'],
-        reply: "You're welcome! Feel free to ask if you have any more questions."
-      }
+    // State of conversation messages for demonstration GPT response simulation
+    const conversationHistory = [];
+
+    // GPT-like simulated responses: simple keyword mapping, fallback random friendly answers
+    const gptSimulatedAnswers = [
+      "Thanks for telling me. Can you please provide more details?",
+      "I see. Is the phone model still under warranty?",
+      "That's helpful. Have you tried restarting the device?",
+      "Common issue! We can help you fix that quickly.",
+      "Could you tell me when the problem started?",
+      "Our technicians are experts in that area.",
+      "We value your patience. What else can I help with?",
+      "Please describe the symptoms a bit more.",
+      "Have you noticed any recent updates or damage?",
+      "We aim to get your device working like new."
     ];
 
-    // Default reply if no keyword matched
-    const defaultReply = "Thanks for reaching out! Can you please provide more details about your phone issue?";
-
-    // Sanitize and lowercase text for matching
-    function textIncludesKeywords(text, keywords) {
-      text = text.toLowerCase();
-      return keywords.some(keyword => text.includes(keyword));
+    // Append message to chat
+    function appendMessage(text, sender='gpt') {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message');
+      if(sender === 'user') {
+        msgDiv.classList.add('user');
+        msgDiv.textContent = text;
+      } else if(sender === 'gpt') {
+        msgDiv.classList.add('gpt');
+        msgDiv.textContent = text;
+      } else if(sender === 'system') {
+        msgDiv.classList.add('gpt');
+        msgDiv.style.fontStyle = 'italic';
+        msgDiv.textContent = text;
+      }
+      messagesEl.appendChild(msgDiv);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // Create message element
-    function createMessage(text, type = 'auto-reply') {
-      const msgElem = document.createElement('div');
-      msgElem.classList.add('message', type);
-      msgElem.textContent = text;
-      return msgElem;
+    // Generate 6 digit case number (random numeric string)
+    function generateCaseCode() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // Append message and scroll chat to bottom
-    function appendMessage(msgElem) {
-      chatWindow.appendChild(msgElem);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    // Generate Case Number: format CASE-YYYYMMDD-HHMMSS+random4digits
-    function generateCaseNumber() {
-      const dt = new Date();
-      const pad = (n) => n.toString().padStart(2, '0');
-      const y = dt.getFullYear();
-      const m = pad(dt.getMonth() + 1);
-      const d = pad(dt.getDate());
-      const hh = pad(dt.getHours());
-      const mm = pad(dt.getMinutes());
-      const ss = pad(dt.getSeconds());
-      const randomDigits = Math.floor(Math.random() * 9000 + 1000); // 4 digit random number
-      return `CASE-${y}${m}${d}-${hh}${mm}${ss}-${randomDigits}`;
-    }
-
-    // Create WhatsApp link element with prefilled message
-    function createWhatsAppLink(caseNumber, userMessage) {
-      const baseURL = 'https://wa.me/' + whatsappNumber;
-      // Compose message text - escape & encode URI
-      const text = `Hello, I have created a repair case.\nCase Number: ${caseNumber}\nIssue: ${userMessage}`;
-      const url = `${baseURL}?text=${encodeURIComponent(text)}`;
+    // Create WhatsApp link element
+    function createWhatsAppLink(caseCode) {
+      const baseUrl = `https://wa.me/${whatsappNumber}`;
+      const msg = `Hello, I have completed my phone repair conversation. My case number is: ${caseCode}`;
+      const url = `${baseUrl}?text=${encodeURIComponent(msg)}`;
       const link = document.createElement('a');
       link.href = url;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.className = 'whatsapp-link';
-      link.textContent = 'Send Case Details to WhatsApp';
-      link.setAttribute('aria-label', 'Send repair case details to WhatsApp');
+      link.textContent = 'Send Case Number on WhatsApp';
+      link.setAttribute('aria-label', 'Send case number link on WhatsApp');
       return link;
     }
 
-    // On form submit: user sends message, auto reply with case number and WhatsApp link
-    chatForm.addEventListener('submit', (e) => {
+    // Simulate GPT response: choose random response from simulated answers, or canned answers by keyword matching
+    function simulateGPTResponse(userMessage) {
+      const msg = userMessage.toLowerCase();
+
+      // Basic keyword -> response mapping
+      if(msg.includes('screen') || msg.includes('crack') || msg.includes('display')) {
+        return "Screen issues are common. We offer reliable replacements. Can you share your phone model?";
+      }
+      if(msg.includes('battery') || msg.includes('charge') || msg.includes('power')) {
+        return "Battery problems can be resolved quickly. How long has the battery been giving trouble?";
+      }
+      if(msg.includes('software') || msg.includes('update') || msg.includes('error') || msg.includes('crash') || msg.includes('freeze')) {
+        return "Software glitches can often be fixed with updates or resets. Have you updated your phone recently?";
+      }
+      if(msg.includes('water') || msg.includes('liquid') || msg.includes('wet') || msg.includes('damage')) {
+        return "Water damage needs immediate attention. Please keep your phone off and bring it to us ASAP.";
+      }
+      if(msg.includes('price') || msg.includes('cost') || msg.includes('repair') || msg.includes('quote')) {
+        return "Costs vary based on issue. Could you provide more details about the problem?";
+      }
+      if(msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+        return "Hello! I'm here to assist you with your phone repair needs. How can I help?";
+      }
+      if(msg.includes('thank') || msg.includes('thanks')) {
+        return "You're welcome! Let me know if there's anything else.";
+      }
+
+      // Otherwise random from generic pool
+      const idx = Math.floor(Math.random() * gptSimulatedAnswers.length);
+      return gptSimulatedAnswers[idx];
+    }
+
+    // History push and append message helper
+    function userSendsMessage(text) {
+      conversationHistory.push({ from: 'user', text });
+      appendMessage(text, 'user');
+    }
+    function gptSendsMessage(text) {
+      conversationHistory.push({ from: 'gpt', text });
+      appendMessage(text, 'gpt');
+    }
+
+    // Disable or enable input controls
+    function setInputEnabled(enabled) {
+      input.disabled = !enabled;
+      form.querySelector('button[type=submit]').disabled = !enabled;
+    }
+
+    // Handle form submission (user sends message)
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const userMessage = chatInput.value.trim();
-      if (!userMessage) return;
+      const msg = input.value.trim();
+      if(!msg) return;
+      userSendsMessage(msg);
+      input.value = '';
+      setInputEnabled(false);
 
-      appendMessage(createMessage(userMessage, 'user'));
+      // Simulate GPT typing delay
+      await new Promise(resolve => setTimeout(resolve, 900));
 
-      chatInput.value = '';
-      chatInput.disabled = true;
+      const gptReply = simulateGPTResponse(msg);
+      gptSendsMessage(gptReply);
 
-      const caseNumber = generateCaseNumber();
+      setInputEnabled(true);
+      input.focus();
+      finishBtn.style.display = 'inline-block'; // show finish button once conversation started
+    });
 
+    // Finish conversation: generate case code & show WhatsApp link
+    finishBtn.addEventListener('click', () => {
+      if (finishBtn.disabled) return;
+      finishBtn.disabled = true;
+      setInputEnabled(false);
+      gptSendsMessage("Thank you for chatting with us. Generating your case number...");
       setTimeout(() => {
-        let replyText = '';
-        for (const rule of autoReplies) {
-          if (textIncludesKeywords(userMessage, rule.keywords)) {
-            replyText = rule.reply;
-            break;
-          }
-        }
-        if (!replyText) {
-          replyText = defaultReply;
-        }
+        const caseCode = generateCaseCode();
+        gptSendsMessage(`Your unique case number is: ${caseCode}`);
 
-        // Append reply message with case number included
-        appendMessage(createMessage(replyText, 'auto-reply'));
-        appendMessage(createMessage(`Your Case Number: ${caseNumber}`, 'auto-reply'));
+        // Append WhatsApp link
+        const waLink = createWhatsAppLink(caseCode);
+        messagesEl.appendChild(waLink);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
 
-        // Append WhatsApp link after messages
-        const waLink = createWhatsAppLink(caseNumber, userMessage);
-        chatWindow.appendChild(waLink);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-
-        chatInput.disabled = false;
-        chatInput.focus();
-      }, 900);
+        finishBtn.style.display = 'none';
+        finishBtn.disabled = false;
+        setInputEnabled(false);
+      }, 1200);
     });
 
-    // Close button hides chat box
+    // Close chat hide box
     closeBtn.addEventListener('click', () => {
-      box.style.display = 'none';
+      document.querySelector('.chatbox').style.display = 'none';
     });
 
-    // Initial greeting message
-    appendMessage(createMessage("Hi! I'm your phone repair assistant. How can I help you today?", 'auto-reply'));
+    // Initial bot greeting
+    gptSendsMessage("Hi! I'm your phone repair assistant powered by GPT. How can I help you today?");
   })();
 </script>
 </body>
