@@ -300,7 +300,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/688b1fe5-1e69-4c06-9d8f-be3db3e1d8e7.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://placehold.co/32x32/000000/ffffff?text=Z" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -360,8 +360,8 @@
 <script>
   (function() {
     // Access codes allowed
-    const DEALER_ACCESS_CODES = ['dealer', 'dealer2'];  // multiple dealer codes can be added here
-    const USER_ACCESS_CODE = 'user'; // For regular user, no dealer discount
+    const DEALER_ACCESS_CODES = ['dealer', 'dealer2'];  // multiple dealer codes
+    const USER_ACCESS_CODE = 'user'; // regular user access no discount
     const VALID_CODES = [...DEALER_ACCESS_CODES, USER_ACCESS_CODE];
 
     const form = document.getElementById('access-form');
@@ -375,7 +375,7 @@
 
     let isDealer = false;
 
-    // Pricelist data for each brand (base prices)
+    // Base price data for brands
     const priceLists = {
       "OPPO": [
         {model: "OPPO A16", price: 100},
@@ -433,14 +433,12 @@
       "HONOR": []
     };
 
-    // Enable submit if input not empty
     input.addEventListener('input', () => {
       const value = input.value.trim();
       submitBtn.disabled = value.length === 0;
       message.textContent = '';
     });
 
-    // Handle form submit and determine if dealer or regular user
     form.addEventListener('submit', e => {
       e.preventDefault();
       const code = input.value.trim().toLowerCase();
@@ -460,7 +458,6 @@
       modelSelect.value = '';
     });
 
-    // Listen for model select and display pricelist accordingly
     modelSelect.addEventListener('change', () => {
       const brand = modelSelect.value;
       pricelistTableBody.innerHTML = '';
@@ -478,7 +475,6 @@
             tdPrice.textContent = "RM" + item.price.toFixed(2);
 
             const tdDealerPrice = document.createElement('td');
-            // Calculate dealer price with 30% deduction if dealer access code used
             const dealerPrice = isDealer ? item.price * 0.7 : item.price;
             tdDealerPrice.textContent = "RM" + dealerPrice.toFixed(2);
 
@@ -495,10 +491,7 @@
       }
     });
 
-    // Access codes allowed
-    const VALID_CODES = [...DEALER_ACCESS_CODES, USER_ACCESS_CODE];
-  })();
-</script>
+  </script>
 
 <style>
   /* Visually hidden utility for accessibility */
@@ -507,7 +500,7 @@
     border: 0 !important;
     clip: rect(1px,1px,1px,1px) !important;
     -webkit-clip-path: inset(50%) !important;
-    clip-path: inset(50%) !important;
+            clip-path: inset(50%) !important;
     height: 1px !important;
     margin: -1px !important;
     overflow: hidden !important;
@@ -519,4 +512,3 @@
 </style>
 </body>
 </html>
-
