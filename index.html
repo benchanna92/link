@@ -214,7 +214,7 @@
     font-weight: 600;
     color: #374151;
   }
-  thead th:nth-child(2), thead th:nth-child(3) {
+  thead th:nth-child(2) {
     text-align: right;
   }
 
@@ -228,7 +228,7 @@
     padding: 0.75rem 1rem;
     color: #4b5563;
   }
-  tbody td:nth-child(2), tbody td:nth-child(3) {
+  tbody td:nth-child(2) {
     text-align: right;
   }
 
@@ -291,8 +291,7 @@
       text-align: left;
     }
     tbody td:nth-of-type(1)::before { content: "Model"; }
-    tbody td:nth-of-type(2)::before { content: "Customer Price (RM)"; }
-    tbody td:nth-of-type(3)::before { content: "Dealer Price (RM)"; text-align:right;}
+    tbody td:nth-of-type(2)::before { content: "Price (RM)"; }
   }
 </style>
 </head>
@@ -300,7 +299,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f609eda9-6f1a-41a8-aaae-6c05410b223f.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://placehold.co/32x32/000000/ffffff?text=Z" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -338,8 +337,7 @@
         <thead>
           <tr>
             <th scope="col">Model</th>
-            <th scope="col">Customer Price (RM)</th>
-            <th scope="col">Dealer Price (RM)</th>
+            <th scope="col">Price (RM)</th>
           </tr>
         </thead>
         <tbody>
@@ -432,10 +430,8 @@
       "HONOR": []
     };
 
-    // Initially disable button
     submitBtn.disabled = true;
 
-    // Enable submit button when input is not empty
     input.addEventListener('input', () => {
       const val = input.value.trim();
       submitBtn.disabled = val.length === 0;
@@ -452,7 +448,7 @@
         return;
       }
 
-      isDealer = (codeInput === DEALER_ACCESS_CODE); // dealer gets dealer pricing
+      isDealer = (codeInput === DEALER_ACCESS_CODE); // dealer pricing only for dealer code
 
       message.textContent = '';
       form.hidden = true;
@@ -467,23 +463,20 @@
       if (priceLists.hasOwnProperty(brand)) {
         const list = priceLists[brand];
         if (list.length === 0) {
-          pricelistTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
+          pricelistTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
         } else {
           list.forEach(item => {
             const tr = document.createElement('tr');
             const tdModel = document.createElement('td');
             tdModel.textContent = item.model;
 
-            const tdCustomerPrice = document.createElement('td');
-            tdCustomerPrice.textContent = "RM" + item.price.toFixed(2);
-
-            const tdDealerPrice = document.createElement('td');
-            const dealerPrice = (item.price * 0.7);
-            tdDealerPrice.textContent = isDealer ? "RM" + dealerPrice.toFixed(2) : 'N/A';
+            const tdPrice = document.createElement('td');
+            // Show dealer price if dealer, else customer price
+            const priceToShow = isDealer ? (item.price * 0.7) : item.price;
+            tdPrice.textContent = "RM" + priceToShow.toFixed(2);
 
             tr.appendChild(tdModel);
-            tr.appendChild(tdCustomerPrice);
-            tr.appendChild(tdDealerPrice);
+            tr.appendChild(tdPrice);
 
             pricelistTableBody.appendChild(tr);
           });
@@ -493,6 +486,10 @@
         pricelistCard.hidden = true;
       }
     });
+
+    const DEALER_ACCESS_CODE = 'dealer';
+    const CUSTOMER_ACCESS_CODE = 'zuucaster';
+    const VALID_CODES = [DEALER_ACCESS_CODE, CUSTOMER_ACCESS_CODE];
   });
 </script>
 
@@ -503,7 +500,7 @@
     border: 0 !important;
     clip: rect(1px,1px,1px,1px) !important;
     -webkit-clip-path: inset(50%) !important;
-            clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
     height: 1px !important;
     margin: -1px !important;
     overflow: hidden !important;
@@ -515,4 +512,3 @@
 </style>
 </body>
 </html>
-
