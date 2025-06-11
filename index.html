@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chat Bantuan Pembaikan Telefon</title>
+<title>Chat Bantuan Telefon Zuu Caster AI</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
@@ -13,7 +13,7 @@
   body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: #f5f7fa;
+    background: #fff0f0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,31 +22,33 @@
   .chatbox {
     width: 360px;
     max-width: 95vw;
-    background: #20232a;
-    color: #e1e4ea;
+    background: #ffffff;
+    color: #8b0000;
     border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 32px rgba(139,0,0,0.3);
     display: flex;
     flex-direction: column;
     user-select: none;
     overflow: hidden;
     font-size: 14px;
     z-index: 1000;
+    border: 2px solid #b22222;
   }
   .header {
-    background: #24292e;
+    background: #b22222;
     padding: 16px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 18px;
-    color: #61dafb;
+    color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
   }
   .close-btn {
     background: transparent;
     border: none;
-    color: #61dafb;
+    color: #ffe6e6;
     font-size: 22px;
     cursor: pointer;
     padding: 0;
@@ -55,24 +57,24 @@
   }
   .close-btn:hover,
   .close-btn:focus {
-    color: #21a1f1;
+    color: #ffcccc;
     outline: none;
   }
   .messages {
-    background: #20232a;
+    background: #fff0f0;
     padding: 16px;
     flex-grow: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     scrollbar-width: thin;
-    scrollbar-color: #61dafb transparent;
+    scrollbar-color: #b22222 transparent;
   }
   .messages::-webkit-scrollbar {
     width: 8px;
   }
   .messages::-webkit-scrollbar-thumb {
-    background-color: #61dafb;
+    background-color: #b22222;
     border-radius: 4px;
   }
   .messages::-webkit-scrollbar-track {
@@ -87,68 +89,70 @@
     word-wrap: break-word;
   }
   .message.user {
-    background: #61dafb;
-    color: #20232a;
+    background: #b22222;
+    color: #fff;
     align-self: flex-end;
     border-bottom-right-radius: 4px;
-    box-shadow: 0 2px 6px rgba(97,218,251,0.5);
+    box-shadow: 0 2px 6px rgba(178,34,34,0.7);
   }
   .message.gpt {
-    background: #2d333b;
+    background: #f7dada;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
-    box-shadow: 0 2px 6px rgba(101,114,133,0.5);
+    color: #8b0000;
+    box-shadow: 0 2px 6px rgba(139,0,0,0.3);
   }
   .whatsapp-link {
     display: inline-block;
     margin: 12px auto 16px auto;
     padding: 10px 20px;
-    background: #25D366;
+    background: #b22222;
     color: white;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 24px;
     cursor: pointer;
     text-decoration: none;
     user-select: none;
     font-size: 14px;
-    box-shadow: 0 4px 6px rgb(37 211 102 / 0.5);
+    box-shadow: 0 4px 6px rgba(178,34,34,0.6);
     transition: background-color 0.3s ease;
     max-width: 80%;
     text-align: center;
   }
   .whatsapp-link:hover,
   .whatsapp-link:focus {
-    background-color: #1ebe57;
+    background-color: #7f1212;
     outline: none;
   }
   .controls {
     display: flex;
-    border-top: 1px solid #3c4048;
-    background: #24292e;
+    border-top: 1px solid #b22222;
+    background: #fff0f0;
     padding: 8px;
   }
   .controls input[type="text"] {
     flex-grow: 1;
-    border: none;
+    border: 2px solid #b22222;
     padding: 12px 16px;
     font-size: 14px;
     border-radius: 16px;
-    color: #e1e4ea;
-    background: #20232a;
+    color: #8b0000;
+    background: #fff;
+    transition: border-color 0.3s ease;
   }
   .controls input[type="text"]::placeholder {
-    color: #6b7280;
+    color: #b22222;
   }
   .controls input[type="text"]:focus {
     outline: none;
-    background: #24292e;
+    border-color: #7f1212;
   }
   .controls button {
     margin-left: 8px;
-    background: #61dafb;
+    background: #b22222;
     border: none;
-    color: #20232a;
-    font-weight: 600;
+    color: #fff;
+    font-weight: 700;
     padding: 0 20px;
     font-size: 14px;
     cursor: pointer;
@@ -157,12 +161,12 @@
   }
   .controls button:hover,
   .controls button:focus {
-    background: #21a1f1;
+    background: #7f1212;
     outline: none;
   }
   .finish-btn {
     margin: 0 auto 16px auto;
-    background: #ff6b6b;
+    background: #e63946;
     border: none;
     color: white;
     font-weight: 700;
@@ -170,14 +174,14 @@
     font-size: 15px;
     border-radius: 24px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(255,107,107,0.6);
+    box-shadow: 0 4px 8px rgba(230,57,70,0.7);
     transition: background-color 0.3s ease;
     user-select: none;
     display: none;
   }
   .finish-btn:hover,
   .finish-btn:focus {
-    background: #e85c5c;
+    background: #9f2930;
     outline: none;
   }
   @media (max-width: 420px) {
@@ -188,9 +192,9 @@
 </style>
 </head>
 <body>
-  <section class="chatbox" role="region" aria-label="Pembantu Perbualan Pembaikan Telefon" aria-live="polite" aria-atomic="true">
+  <section class="chatbox" role="region" aria-label="Zuu Caster AI pembantu perbualan" aria-live="polite" aria-atomic="true">
     <header class="header">
-      <h1 style="margin:0; font-size:1.25rem; color:#61dafb;">Pembantu Pembaikan Telefon</h1>
+      <h1 style="margin:0; font-size:1.25rem; color:#fff;">Zuu Caster AI</h1>
       <button class="close-btn" aria-label="Tutup Chatbox" title="Tutup Chatbox">&times;</button>
     </header>
     <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
@@ -210,9 +214,8 @@
     const closeBtn = document.querySelector('.close-btn');
     const whatsappNumber = '60178040403';
 
-    let userIssueMessages = []; // Simpan mesej pengguna sebagai isu semasa
+    let userIssueMessages = [];
 
-    // Balasan simulasi GPT dalam Bahasa Melayu — balasan generik
     const gptSimulatedAnswers = [
       "Terima kasih atas maklumat itu. Boleh ceritakan lebih lanjut?",
       "Boleh saya tahu model telefon anda?",
@@ -226,7 +229,6 @@
       "Kami ingin pastikan telefon anda berfungsi sempurna."
     ];
 
-    // Tambah mesej ke chat
     function appendMessage(text, sender='gpt') {
       const msgDiv = document.createElement('div');
       msgDiv.classList.add('message');
@@ -245,15 +247,13 @@
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // Jana kod kes 6 digit secara rawak
     function generateCaseCode() {
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // Buat pautan WhatsApp dengan mesej siap isi
     function createWhatsAppLink(caseCode, issueSummary) {
       const baseUrl = `https://wa.me/${whatsappNumber}`;
-      const message = `Hai, saya telah selesai bersembang untuk pembaikan telefon. Kod kes saya ialah: ${caseCode}\nIsu yang dilaporkan: ${issueSummary}`;
+      const message = `Hai, saya telah selesai bersembang dengan Zuu Caster AI. Kod kes saya ialah: ${caseCode}\nIsu yang dilaporkan: ${issueSummary}`;
       const url = `${baseUrl}?text=${encodeURIComponent(message)}`;
       const link = document.createElement('a');
       link.href = url;
@@ -265,13 +265,11 @@
       return link;
     }
 
-    // Pilih balasan rawak dari simulasi
     function simulateGPTResponse() {
       const idx = Math.floor(Math.random() * gptSimulatedAnswers.length);
       return gptSimulatedAnswers[idx];
     }
 
-    // Kawal input dan paparkan mesej
     function userSendsMessage(text) {
       userIssueMessages.push(text);
       appendMessage(text, 'user');
@@ -285,7 +283,6 @@
       form.querySelector('button[type=submit]').disabled = !enabled;
     }
 
-    // Hantar mesej user
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const msg = input.value.trim();
@@ -294,7 +291,6 @@
       input.value = '';
       setInputEnabled(false);
 
-      // Simulasi delay
       await new Promise(res => setTimeout(res, 900));
 
       const reply = simulateGPTResponse();
@@ -305,7 +301,6 @@
       finishBtn.style.display = 'inline-block';
     });
 
-    // Tamatkan perbualan, jana kod kes, hantar ke WhatsApp
     finishBtn.addEventListener('click', () => {
       if(finishBtn.disabled) return;
       finishBtn.disabled = true;
@@ -315,13 +310,11 @@
         const caseCode = generateCaseCode();
         gptSendsMessage(`Kod kes unik anda ialah: ${caseCode}`);
 
-        // Gabungkan mesej isu pengguna sebagai ringkasan (max 200 char)
         let issueSummary = userIssueMessages.join(" ");
         if(issueSummary.length > 200) {
           issueSummary = issueSummary.slice(0, 197) + '...';
         }
 
-        // Tambah pautan WhatsApp
         const waLink = createWhatsAppLink(caseCode, issueSummary);
         messagesEl.appendChild(waLink);
         messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -332,14 +325,13 @@
       }, 1500);
     });
 
-    // Tutup chatbox
     closeBtn.addEventListener('click', () => {
       document.querySelector('.chatbox').style.display = 'none';
     });
 
-    // Mesej sapaan awal dalam BM
-    gptSendsMessage("Hai! Saya pembantu pembaikan telefon anda. Bagaimana saya boleh membantu?");
+    gptSendsMessage("Hai! Saya Zuu Caster AI. Bagaimana saya boleh membantu anda hari ini?");
   })();
 </script>
 </body>
 </html>
+
