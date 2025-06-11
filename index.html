@@ -292,7 +292,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cb9016f7-754c-43c6-9551-0ead2fad92e4.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cdf17e60-be4e-4c67-ad7f-0583bb655342.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -331,6 +331,7 @@
           <tr>
             <th scope="col">Model</th>
             <th scope="col">Price (RM)</th>
+            <th scope="col">Dealer Price (RM)</th>
           </tr>
         </thead>
         <tbody>
@@ -350,7 +351,7 @@
 
 <script>
   (function() {
-    const ACCESS_CODE = 'zuucaster';
+    const ACCESS_CODE = 'dealer';
     const form = document.getElementById('access-form');
     const input = document.getElementById('access-code');
     const submitBtn = document.getElementById('submit-btn');
@@ -360,60 +361,60 @@
     const pricelistCard = document.getElementById('pricelist-card');
     const pricelistTableBody = document.querySelector('#pricelist-table tbody');
 
-    // Pricelist data for each brand
+    // Pricelist data for each brand (base prices)
     const priceLists = {
       "OPPO": [
-        {model: "OPPO A16", price: "RM100"},
-        {model: "OPPO A16K", price: "RM100"},
-        {model: "OPPO A17", price: "RM100"},
-        {model: "OPPO A18", price: "RM100"},
-        {model: "OPPO A38 (ANDROID 14)", price: "RM100"},
-        {model: "OPPO A38 (ANDROID 15)", price: "RM150"},
-        {model: "OPPO A54", price: "RM100"},
-        {model: "OPPO A57", price: "RM100"},
-        {model: "OPPO A77", price: "RM100"},
-        {model: "OPPO A78", price: "RM150"},
-        {model: "OPPO A79", price: "RM150"},
-        {model: "OPPO RENO 5PRO", price: "RM150"},
-        {model: "OPPO RENO 6/6Z", price: "RM150"},
-        {model: "OPPO RENO 8", price: "RM150"},
-        {model: "OPPO RENO 8 PRO", price: "RM180"},
-        {model: "OPPO RENO 10", price: "RM150"},
-        {model: "OPPO RENO 11", price: "RM150"},
-        {model: "OPPO RENO 12 PRO", price: "RM180"},
-        {model: "OPPO RENO 11F", price: "RM150"},
-        {model: "OPPO RENO 12F", price: "RM200"},
-        {model: "OPPO RENO 13F (MEDIATEK)", price: "RM250"},
-        {model: "OPPO A3PRO/A60", price: "RM200"},
-        {model: "OPPO A3", price: "RM150"}
+        {model: "OPPO A16", price: 100},
+        {model: "OPPO A16K", price: 100},
+        {model: "OPPO A17", price: 100},
+        {model: "OPPO A18", price: 100},
+        {model: "OPPO A38 (ANDROID 14)", price: 100},
+        {model: "OPPO A38 (ANDROID 15)", price: 150},
+        {model: "OPPO A54", price: 100},
+        {model: "OPPO A57", price: 100},
+        {model: "OPPO A77", price: 100},
+        {model: "OPPO A78", price: 150},
+        {model: "OPPO A79", price: 150},
+        {model: "OPPO RENO 5PRO", price: 150},
+        {model: "OPPO RENO 6/6Z", price: 150},
+        {model: "OPPO RENO 8", price: 150},
+        {model: "OPPO RENO 8 PRO", price: 180},
+        {model: "OPPO RENO 10", price: 150},
+        {model: "OPPO RENO 11", price: 150},
+        {model: "OPPO RENO 12 PRO", price: 180},
+        {model: "OPPO RENO 11F", price: 150},
+        {model: "OPPO RENO 12F", price: 200},
+        {model: "OPPO RENO 13F (MEDIATEK)", price: 250},
+        {model: "OPPO A3PRO/A60", price: 200},
+        {model: "OPPO A3", price: 150}
       ],
       "REALME": [
-        {model: "REALME C21", price: "RM50"},
-        {model: "REALME C20", price: "RM50"},
-        {model: "REALME C53", price: "RM60"},
-        {model: "REALME C55", price: "RM60"},
-        {model: "REALME NOTE50", price: "RM100"},
-        {model: "REALME NOTE60", price: "RM100"},
-        {model: "REALME 11 (ANDROID 14)", price: "RM80"},
-        {model: "REALME 11 (ANDROID 15)", price: "RM130"},
-        {model: "REALME 12X (ANDROID 14)", price: "RM150"},
-        {model: "REALME 12X (ANDROID 15)", price: "RM200"},
-        {model: "REALME 14X", price: "RM200"},
-        {model: "REALME 12", price: "RM200"},
-        {model: "REALME 13", price: "RM200"},
-        {model: "REALME 12 PRO", price: "RM250"}
+        {model: "REALME C21", price: 50},
+        {model: "REALME C20", price: 50},
+        {model: "REALME C53", price: 60},
+        {model: "REALME C55", price: 60},
+        {model: "REALME NOTE50", price: 100},
+        {model: "REALME NOTE60", price: 100},
+        {model: "REALME 11 (ANDROID 14)", price: 80},
+        {model: "REALME 11 (ANDROID 15)", price: 130},
+        {model: "REALME 12X (ANDROID 14)", price: 150},
+        {model: "REALME 12X (ANDROID 15)", price: 200},
+        {model: "REALME 14X", price: 200},
+        {model: "REALME 12", price: 200},
+        {model: "REALME 13", price: 200},
+        {model: "REALME 12 PRO", price: 250}
       ],
       "VIVO": [
-        {model: "VIVO Y03", price: "RM170"},
-        {model: "VIVO Y20", price: "RM70"},
-        {model: "VIVO Y16", price: "RM130"},
-        {model: "VIVO Y36", price: "RM180"},
-        {model: "VIVO Y27", price: "RM200"},
-        {model: "VIVO Y28S", price: "RM230"},
-        {model: "VIVO Y77", price: "RM200"},
-        {model: "VIVO Y30", price: "RM200"},
-        {model: "VIVO V23", price: "RM200"},
-        {model: "VIVO V40 LITE", price: "RM350"}
+        {model: "VIVO Y03", price: 170},
+        {model: "VIVO Y20", price: 70},
+        {model: "VIVO Y16", price: 130},
+        {model: "VIVO Y36", price: 180},
+        {model: "VIVO Y27", price: 200},
+        {model: "VIVO Y28S", price: 230},
+        {model: "VIVO Y77", price: 200},
+        {model: "VIVO Y30", price: 200},
+        {model: "VIVO V23", price: 200},
+        {model: "VIVO V40 LITE", price: 350}
       ],
       "HONOR": []
     };
@@ -447,16 +448,20 @@
       if (priceLists.hasOwnProperty(brand)) {
         const list = priceLists[brand];
         if (list.length === 0) {
-          pricelistTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
+          pricelistTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
         } else {
           list.forEach(item => {
             const tr = document.createElement('tr');
             const tdModel = document.createElement('td');
             tdModel.textContent = item.model;
             const tdPrice = document.createElement('td');
-            tdPrice.textContent = item.price;
+            tdPrice.textContent = "RM" + item.price.toFixed(2);
+            const tdDealerPrice = document.createElement('td');
+            const dealerPrice = (item.price * 0.8);
+            tdDealerPrice.textContent = "RM" + dealerPrice.toFixed(2);
             tr.appendChild(tdModel);
             tr.appendChild(tdPrice);
+            tr.appendChild(tdDealerPrice);
             pricelistTableBody.appendChild(tr);
           });
         }
