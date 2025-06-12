@@ -13,6 +13,9 @@
             color: #111827;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .logo-header {
             font-family: 'Playfair Display', serif;
@@ -46,6 +49,9 @@
             margin: 12px auto 0;
             box-shadow: 0 0 8px rgba(67, 56, 202, 0.6);
             opacity: 0.8;
+        }
+        main {
+            flex-grow: 1;
         }
         label {
             font-weight: 600;
@@ -170,7 +176,7 @@
             cursor: pointer;
         }
         #process-btn {
-            margin-top: 20px;
+            margin-top: 32px;
             padding: 0.75rem 1.25rem;
             font-weight: 700;
             border-radius: 8px;
@@ -180,11 +186,17 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            align-self: center;
         }
         #process-btn:hover,
         #process-btn:focus {
             background-color: #059669; /* Green-600 */
             outline: none;
+        }
+        /* container for access and model selection */
+        #access-section {
+            max-width: 600px;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -195,56 +207,60 @@
         <span class="subtitle">IT SOLUTION</span>
     </header>
 
-    <label for="access-code">Enter Access Code:</label>
-    <input
-        type="text"
-        id="access-code"
-        aria-label="Enter access code"
-        placeholder="Enter code here"
-        autocomplete="off"
-    />
-    <button type="button" onclick="checkAccess()" aria-label="Submit access code">
-        Submit
+    <main id="access-section">
+        <label for="access-code">Enter Access Code:</label>
+        <input
+            type="text"
+            id="access-code"
+            aria-label="Enter access code"
+            placeholder="Enter code here"
+            autocomplete="off"
+        />
+        <button type="button" onclick="checkAccess()" aria-label="Submit Process">
+            Submit Process
+        </button>
+
+        <div id="model-selection" class="hidden" aria-live="polite" style="margin-top: 24px;">
+            <h2>Select Model</h2>
+            <select id="model" aria-label="Select device model" onchange="showPriceList()">
+                <option value="">--Select Model--</option>
+                <option value="oppo">OPPO</option>
+                <option value="vivo">VIVO</option>
+                <option value="realme">REALME</option>
+                <option value="honor">HONOR</option>
+            </select>
+        </div>
+
+        <section id="price-list" class="price-list hidden" aria-live="polite"></section>
+
+        <section id="telco-pricing" class="price-list hidden" aria-live="polite" style="margin-top: 24px;">
+            <h2>TELCO Unlock Pricing</h2>
+            <ul>
+                <li>REALME C21 - RM50</li>
+                <li>REALME C20 - RM50</li>
+                <li>REALME C53 - RM60</li>
+                <li>REALME C55 - RM60</li>
+                <li>REALME NOTE50 - RM100</li>
+                <li>REALME NOTE60 - RM100</li>
+                <li>REALME 11 - RM80 (ANDROID 14)</li>
+                <li>REALME 11 - RM130 (ANDROID 15)</li>
+                <li>REALME 12X - RM150 (ANDROID 14)</li>
+                <li>REALME 12X - RM200 (ANDROID 15)</li>
+                <li>REALME 14X - RM200</li>
+                <li>REALME 12 - RM200</li>
+                <li>REALME 13 - RM200</li>
+                <li>REALME 12 PRO - RM250</li>
+            </ul>
+            <p class="note">- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
+            <p class="note">- No refund after processing.</p>
+            <p class="note">- No cancellation after service in progress.</p>
+        </section>
+    </main>
+
+    <!-- Process Selection Button at bottom -->
+    <button id="process-btn" class="hidden" onclick="openModal()">
+        Process Selection
     </button>
-
-    <div id="model-selection" class="hidden" aria-live="polite">
-        <h2>Select Model</h2>
-        <select id="model" aria-label="Select device model" onchange="showPriceList()">
-            <option value="">--Select Model--</option>
-            <option value="oppo">OPPO</option>
-            <option value="vivo">VIVO</option>
-            <option value="realme">REALME</option>
-            <option value="honor">HONOR</option>
-        </select>
-
-        <!-- Process Button (hidden by default) -->
-        <button id="process-btn" class="hidden" onclick="openModal()">Process Selection</button>
-    </div>
-
-    <section id="price-list" class="price-list hidden" aria-live="polite"></section>
-
-    <section id="telco-pricing" class="price-list hidden" aria-live="polite">
-        <h2>TELCO Unlock Pricing</h2>
-        <ul>
-            <li>REALME C21 - RM50</li>
-            <li>REALME C20 - RM50</li>
-            <li>REALME C53 - RM60</li>
-            <li>REALME C55 - RM60</li>
-            <li>REALME NOTE50 - RM100</li>
-            <li>REALME NOTE60 - RM100</li>
-            <li>REALME 11 - RM80 (ANDROID 14)</li>
-            <li>REALME 11 - RM130 (ANDROID 15)</li>
-            <li>REALME 12X - RM150 (ANDROID 14)</li>
-            <li>REALME 12X - RM200 (ANDROID 15)</li>
-            <li>REALME 14X - RM200</li>
-            <li>REALME 12 - RM200</li>
-            <li>REALME 13 - RM200</li>
-            <li>REALME 12 PRO - RM250</li>
-        </ul>
-        <p class="note">- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
-        <p class="note">- No refund after processing.</p>
-        <p class="note">- No cancellation after service in progress.</p>
-    </section>
 
     <!-- Modal for Submission -->
     <div id="myModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
