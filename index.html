@@ -152,22 +152,20 @@
     gap: 3rem;
   }
 
-  /* Model selection and form sections */
-  .model-select-section,
-  .user-details-section {
+  /* Model selection section */
+  .model-select-section {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  label {
+  label[for="model-select"] {
     font-weight: 600;
     color: #111827;
     font-size: 1.125rem;
   }
 
-  select,
-  input[type="text"] {
+  select {
     padding: 0.75rem 1rem;
     font-size: 1rem;
     border-radius: 0.75rem;
@@ -178,8 +176,7 @@
     max-width: 300px;
   }
 
-  select:focus,
-  input[type="text"]:focus {
+  select:focus {
     border-color: #4b5563;
     outline-color: #4b5563;
   }
@@ -222,7 +219,6 @@
     background: white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     border-radius: 0.75rem;
-    cursor: pointer;
   }
 
   tbody td {
@@ -241,42 +237,7 @@
     font-size: 0.875rem;
     color: #6b7280;
     text-align: center;
-  }
-
-  /* User detail form styles */
-  .user-details-section {
-    background: #f9fafb;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-    display: none;
-  }
-
-  .user-details-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .user-details-section button {
-    background-color: #111827;
-    border: none;
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.75rem;
-    border-radius: 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    max-width: 200px;
-    align-self: center;
-  }
-
-  .user-details-section button:hover {
-    background-color: #374151;
-    transform: translateY(-2px);
+    white-space: pre-line;
   }
 
   /* Responsive */
@@ -325,11 +286,6 @@
     }
     tbody td:nth-of-type(1)::before { content: "Item"; }
     tbody td:nth-of-type(2)::before { content: "Price"; }
-    .user-details-section {
-      max-width: 100%;
-      padding: 1rem;
-      display: block !important;
-    }
   }
 </style>
 </head>
@@ -337,7 +293,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/59655c9d-263e-4094-8dce-c7f493521d68.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cdf17e60-be4e-4c67-ad7f-0583bb655342.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -355,7 +311,7 @@
     <div id="form-message" class="message" role="alert" aria-live="assertive"></div>
   </section>
 
-  <section class="content-container" id="content-container" aria-live="polite" aria-atomic="true" tabindex="-1">
+  <section class="content-container" id="content-container" aria-live="polite" aria-atomic="true">
 
     <section class="model-select-section" aria-labelledby="model-select-label">
       <label for="model-select" id="model-select-label">Select Your Brand:</label>
@@ -376,6 +332,7 @@
           <tr>
             <th scope="col">Model</th>
             <th scope="col">Price (RM)</th>
+            <th scope="col">Dealer Price (RM)</th>
           </tr>
         </thead>
         <tbody>
@@ -383,65 +340,9 @@
         </tbody>
       </table>
       <p id="pricelist-description" class="sr-only">Unlock price list for the selected brand.</p>
-      <div class="notes">
-        <p>All processes need 1-14 days depending on available CPU to replace.</p>
-        <p>No refunds after processing.</p>
-        <p>No cancellations after service is in progress.</p>
+      <div class="notes" id="notes-text">
+        <!-- Notes updated dynamically -->
       </div>
-    </section>
-
-    <section class="user-details-section" id="user-details-section" aria-labelledby="user-details-title" hidden>
-      <h2 id="user-details-title" style="text-align:center; font-weight:700; font-size:1.75rem; color:#111827;">Enter Your Details to Proceed</h2>
-      <form id="user-details-form" novalidate>
-        <label for="user-name">Name:</label>
-        <input type="text" id="user-name" name="user-name" placeholder="Your full name" required autocomplete="name" />
-
-        <label for="user-brand-select">Selection Model:</label>
-        <select id="user-brand-select" name="user-brand-select" required>
-          <option value="" disabled selected>Select your model brand</option>
-          <option value="HONOR">HONOR</option>
-          <option value="VIVO">VIVO</option>
-          <option value="OPPO">OPPO</option>
-          <option value="REALME">REALME</option>
-        </select>
-
-        <label for="user-location">Location:</label>
-        <select id="user-location" name="user-location" required>
-          <option value="" disabled selected>Select your location</option>
-          <option value="JOHOR">JOHOR</option>
-          <option value="KEDAH">KEDAH</option>
-          <option value="MELAKA">MELAKA</option>
-          <option value="PERAK">PERAK</option>
-          <option value="KUALA LUMPUR">KUALA LUMPUR</option>
-          <option value="PAHANG">PAHANG</option>
-          <option value="TERENGGANU">TERENGGANU</option>
-          <option value="PERLIS">PERLIS</option>
-          <option value="SABAH">SABAH</option>
-          <option value="SARAWAK">SARAWAK</option>
-          <option value="KELANTAN">KELANTAN</option>
-          <option value="NEGERI SEMBILAN">NEGERI SEMBILAN</option>
-        </select>
-
-        <label for="case-number">Case Number (Auto-generated 5-digit):</label>
-        <input type="text" id="case-number" name="case-number" readonly aria-readonly="true" />
-
-        <label for="user-issue">Issue:</label>
-        <select id="user-issue" name="user-issue" required>
-          <option value="" disabled selected>Select issue type</option>
-          <option value="TELCO">TELCO</option>
-          <option value="SOFTWARE">SOFTWARE</option>
-        </select>
-
-        <label for="how-to-submit">HOW TO SUBMIT:</label>
-        <select id="how-to-submit" name="how-to-submit" required>
-          <option value="" disabled selected>Select a submission method</option>
-          <option value="WHATSAPP">Send via WhatsApp</option>
-          <option value="CONTACT_SUPPORT">Contact Support</option>
-          <option value="EMAIL">Email Submission</option>
-        </select>
-
-        <button type="submit" id="submit-order-btn">Send</button>
-      </form>
     </section>
 
   </section>
@@ -449,7 +350,7 @@
 
 <script>
   (function() {
-    const ACCESS_CODE = 'zuucaster';
+    const ACCESS_CODE = 'dealer';
     const form = document.getElementById('access-form');
     const input = document.getElementById('access-code');
     const submitBtn = document.getElementById('submit-btn');
@@ -458,74 +359,74 @@
     const modelSelect = document.getElementById('model-select');
     const pricelistCard = document.getElementById('pricelist-card');
     const pricelistTableBody = document.querySelector('#pricelist-table tbody');
-    const userDetailsSection = document.getElementById('user-details-section');
-    const userDetailsForm = document.getElementById('user-details-form');
-    const userNameInput = document.getElementById('user-name');
-    const userBrandSelect = document.getElementById('user-brand-select');
-    const userLocationSelect = document.getElementById('user-location');
-    const selectedModelInput = document.getElementById('selected-model');
-    const caseNumberInput = document.getElementById('case-number');
-    const userIssueSelect = document.getElementById('user-issue');
-    const submitOrderBtn = document.getElementById('submit-order-btn');
-    const howToSubmitSelect = document.getElementById('how-to-submit');
+    const notesText = document.getElementById('notes-text');
 
-    // Pricelist data for each brand
+    // Pricelist data for each brand (base prices)
     const priceLists = {
       "OPPO": [
-        {model: "OPPO A16", price: "RM100"},
-        {model: "OPPO A16K", price: "RM100"},
-        {model: "OPPO A17", price: "RM100"},
-        {model: "OPPO A18", price: "RM100"},
-        {model: "OPPO A38 (ANDROID 14)", price: "RM100"},
-        {model: "OPPO A38 (ANDROID 15)", price: "RM150"},
-        {model: "OPPO A54", price: "RM100"},
-        {model: "OPPO A57", price: "RM100"},
-        {model: "OPPO A77", price: "RM100"},
-        {model: "OPPO A78", price: "RM150"},
-        {model: "OPPO A79", price: "RM150"},
-        {model: "OPPO RENO 5PRO", price: "RM150"},
-        {model: "OPPO RENO 6/6Z", price: "RM150"},
-        {model: "OPPO RENO 8", price: "RM150"},
-        {model: "OPPO RENO 8 PRO", price: "RM180"},
-        {model: "OPPO RENO 10", price: "RM150"},
-        {model: "OPPO RENO 11", price: "RM150"},
-        {model: "OPPO RENO 12 PRO", price: "RM180"},
-        {model: "OPPO RENO 11F", price: "RM150"},
-        {model: "OPPO RENO 12F", price: "RM200"},
-        {model: "OPPO RENO 13F (MEDIATEK)", price: "RM250"},
-        {model: "OPPO A3PRO/A60", price: "RM200"},
-        {model: "OPPO A3", price: "RM150"}
+        {model: "OPPO A16", price: 100},
+        {model: "OPPO A16K", price: 100},
+        {model: "OPPO A17", price: 100},
+        {model: "OPPO A18", price: 100},
+        {model: "OPPO A38 (ANDROID 14)", price: 100},
+        {model: "OPPO A38 (ANDROID 15)", price: 150},
+        {model: "OPPO A54", price: 100},
+        {model: "OPPO A57", price: 100},
+        {model: "OPPO A77", price: 100},
+        {model: "OPPO A78", price: 150},
+        {model: "OPPO A79", price: 150},
+        {model: "OPPO RENO 5PRO", price: 150},
+        {model: "OPPO RENO 6/6Z", price: 150},
+        {model: "OPPO RENO 8", price: 150},
+        {model: "OPPO RENO 8 PRO", price: 180},
+        {model: "OPPO RENO 10", price: 150},
+        {model: "OPPO RENO 11", price: 150},
+        {model: "OPPO RENO 12 PRO", price: 180},
+        {model: "OPPO RENO 11F", price: 150},
+        {model: "OPPO RENO 12F", price: 200},
+        {model: "OPPO RENO 13F (MEDIATEK)", price: 250},
+        {model: "OPPO A3PRO/A60", price: 200},
+        {model: "OPPO A3", price: 150}
       ],
       "REALME": [
-        {model: "REALME C21", price: "RM50"},
-        {model: "REALME C20", price: "RM50"},
-        {model: "REALME C53", price: "RM60"},
-        {model: "REALME C55", price: "RM60"},
-        {model: "REALME NOTE50", price: "RM100"},
-        {model: "REALME NOTE60", price: "RM100"},
-        {model: "REALME 11 (ANDROID 14)", price: "RM80"},
-        {model: "REALME 11 (ANDROID 15)", price: "RM130"},
-        {model: "REALME 12X (ANDROID 14)", price: "RM150"},
-        {model: "REALME 12X (ANDROID 15)", price: "RM200"},
-        {model: "REALME 14X", price: "RM200"},
-        {model: "REALME 12", price: "RM200"},
-        {model: "REALME 13", price: "RM200"},
-        {model: "REALME 12 PRO", price: "RM250"}
+        {model: "REALME C21", price: 50},
+        {model: "REALME C20", price: 50},
+        {model: "REALME C53", price: 60},
+        {model: "REALME C55", price: 60},
+        {model: "REALME NOTE50", price: 100},
+        {model: "REALME NOTE60", price: 100},
+        {model: "REALME 11 (ANDROID 14)", price: 80},
+        {model: "REALME 11 (ANDROID 15)", price: 130},
+        {model: "REALME 12X (ANDROID 14)", price: 150},
+        {model: "REALME 12X (ANDROID 15)", price: 200},
+        {model: "REALME 14X", price: 200},
+        {model: "REALME 12", price: 200},
+        {model: "REALME 13", price: 200},
+        {model: "REALME 12 PRO", price: 250}
       ],
       "VIVO": [
-        {model: "VIVO Y03", price: "RM170"},
-        {model: "VIVO Y20", price: "RM70"},
-        {model: "VIVO Y16", price: "RM130"},
-        {model: "VIVO Y36", price: "RM180"},
-        {model: "VIVO Y27", price: "RM200"},
-        {model: "VIVO Y28S", price: "RM230"},
-        {model: "VIVO Y77", price: "RM200"},
-        {model: "VIVO Y30", price: "RM200"},
-        {model: "VIVO V23", price: "RM200"},
-        {model: "VIVO V40 LITE", price: "RM350"}
+        {model: "VIVO Y03", price: 170},
+        {model: "VIVO Y20", price: 70},
+        {model: "VIVO Y16", price: 130},
+        {model: "VIVO Y36", price: 180},
+        {model: "VIVO Y27", price: 200},
+        {model: "VIVO Y28S", price: 230},
+        {model: "VIVO Y77", price: 200},
+        {model: "VIVO Y30", price: 200},
+        {model: "VIVO V23", price: 200},
+        {model: "VIVO V40 LITE", price: 350}
       ],
       "HONOR": []
     };
+
+    // Notes for brands
+    const defaultNotes =
+      "No refunds after processing.\nNo cancellations after service in progress.";
+    const vivoHonorNotes =
+      "HONOR and VIVO process need 1-14 days depending on available CPU to replace.\n" +
+      "No refunds after processing.\n" +
+      "No cancellations after service in progress.\n" +
+      "If you have laptop or PC we can do Remotely using ULTRAVIEW software.";
 
     // Enable submit if input not empty
     input.addEventListener('input', () => {
@@ -543,10 +444,7 @@
         form.hidden = true;
         contentContainer.style.display = 'flex';
         pricelistCard.hidden = true;
-        userDetailsSection.style.display = "none";
         modelSelect.value = '';
-        selectedModelInput.value = '';
-        userDetailsForm.reset();
       } else {
         message.textContent = 'Invalid access code, please try again.';
         input.focus();
@@ -556,94 +454,39 @@
     modelSelect.addEventListener('change', () => {
       const brand = modelSelect.value;
       pricelistTableBody.innerHTML = '';
-      userDetailsSection.style.display = "none";
-      selectedModelInput.value = '';
       if (priceLists.hasOwnProperty(brand)) {
         const list = priceLists[brand];
         if (list.length === 0) {
-          pricelistTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
+          pricelistTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
         } else {
           list.forEach(item => {
             const tr = document.createElement('tr');
             const tdModel = document.createElement('td');
             tdModel.textContent = item.model;
             const tdPrice = document.createElement('td');
-            tdPrice.textContent = item.price;
+            tdPrice.textContent = "RM" + item.price.toFixed(2);
+            const tdDealerPrice = document.createElement('td');
+            const dealerPrice = (item.price * 0.8);
+            tdDealerPrice.textContent = "RM" + dealerPrice.toFixed(2);
             tr.appendChild(tdModel);
             tr.appendChild(tdPrice);
+            tr.appendChild(tdDealerPrice);
             pricelistTableBody.appendChild(tr);
           });
         }
         pricelistCard.hidden = false;
+
+        // Update notes based on brand
+        if (brand === "VIVO" || brand === "HONOR") {
+          notesText.textContent = vivoHonorNotes;
+        } else {
+          notesText.textContent = defaultNotes;
+        }
       } else {
         pricelistCard.hidden = true;
+        notesText.textContent = '';
       }
     });
-
-    pricelistTableBody.addEventListener('click', (event) => {
-      let target = event.target;
-      while(target && target.nodeName !== 'TR') {
-        target = target.parentNode;
-      }
-      if(target && target.nodeName === 'TR') {
-        const model = target.cells[0]?.textContent || '';
-        if(model){
-          selectedModelInput.value = model;
-          userDetailsSection.style.display = "block";
-          // Generate and set a random 5-digit case number
-          caseNumberInput.value = generateCaseNumber();
-          // Scroll to user details section for better UX
-          userDetailsSection.scrollIntoView({behavior:'smooth'});
-        }
-      }
-    });
-
-    function generateCaseNumber(){
-      return Math.floor(10000 + Math.random() * 90000).toString();
-    }
-
-    userDetailsForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if(!userDetailsForm.checkValidity()){
-        userDetailsForm.reportValidity();
-        return;
-      }
-      const name = userNameInput.value.trim();
-      const location = userLocationSelect.value;
-      const brandSelection = userBrandSelect.value;
-      const model = selectedModelInput.value;
-      const caseNumber = caseNumberInput.value;
-      const issue = userIssueSelect.value;
-      const howToSubmit = howToSubmitSelect.value;
-      const whatsappNumber = '+60178040403';
-
-      let message =
-        `Hello Zuucaster IT Solution,%0A` +
-        `I want to process an unlock.%0A` +
-        `Name: ${name}%0A` +
-        `Location: ${location}%0A` +
-        `Model Brand Selection: ${brandSelection}%0A` +
-        `Selected Model: ${model}%0A` +
-        `Case Number: ${caseNumber}%0A` +
-        `Issue: ${issue}%0A` +
-        `How to Submit: ${howToSubmit}`;
-
-      if(howToSubmit === "WHATSAPP"){
-        const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${message}`;
-        window.open(whatsappUrl, '_blank');
-      } else if(howToSubmit === "CONTACT_SUPPORT"){
-        // Open whatsapp contact support link with simple message
-        const supportMsg = encodeURIComponent("Hello Zuucaster IT Solution, I need support.");
-        const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${supportMsg}`;
-        window.open(whatsappUrl, '_blank');
-      } else if(howToSubmit === "EMAIL"){
-        const subject = encodeURIComponent("Request to Process Unlock");
-        const body = message.replace(/%0A/g, '\n');
-        const mailtoUrl = `mailto:malaysiagsm1@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
-        window.location.href = mailtoUrl;
-      }
-    });
-
   })();
 </script>
 
@@ -652,15 +495,15 @@
   .visually-hidden,
   .sr-only {
     border: 0 !important;
-    clip: rect(1px,1px,1px,1px) !important;
+    clip: rect(1px,1px,1px,1px) !important; 
     -webkit-clip-path: inset(50%) !important;
             clip-path: inset(50%) !important;
-    height: 1px !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    position: absolute !important;
-    width: 1px !important;
+    height: 1px !important; 
+    margin: -1px !important; 
+    overflow: hidden !important; 
+    padding: 0 !important; 
+    position: absolute !important; 
+    width: 1px !important; 
     white-space: nowrap !important;
   }
 </style>
