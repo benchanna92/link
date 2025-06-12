@@ -1,416 +1,659 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Price List Checker - ZUUCASTER IT SOLUTION</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            margin: 20px;
-            background: #f7f9fc;
-            color: #111827;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .logo-header {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 3rem;
-            color: #3b3669; /* Elegant deep indigo */
-            margin-bottom: 32px;
-            text-align: center;
-            letter-spacing: 0.04em;
-            user-select: none;
-            position: relative;
-            display: inline-block;
-        }
-        .logo-header .subtitle {
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: #6b7280; /* Gray-500 */
-            letter-spacing: 0.15em;
-            display: block;
-            margin-top: 4px;
-        }
-        .logo-header::after {
-            content: "";
-            display: block;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, #6459da 0%, #4338ca 100%);
-            border-radius: 2px;
-            margin: 12px auto 0;
-            box-shadow: 0 0 8px rgba(67, 56, 202, 0.6);
-            opacity: 0.8;
-        }
-        main {
-            flex-grow: 1;
-        }
-        label {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        input[type='text'] {
-            padding: 0.5rem 0.75rem;
-            font-size: 1rem;
-            border: 2px solid #cbd5e1; /* Gray-300 */
-            border-radius: 8px;
-            width: 250px;
-            transition: border-color 0.3s ease;
-        }
-        input[type='text']:focus {
-            outline: none;
-            border-color: #6459da;
-            box-shadow: 0 0 8px rgba(100, 89, 218, 0.4);
-        }
-        button {
-            background-color: #6459da;
-            color: white;
-            font-weight: 700;
-            font-size: 1rem;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            margin-left: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover,
-        button:focus {
-            background-color: #4338ca;
-            outline: none;
-        }
-        select {
-            font-size: 1rem;
-            padding: 0.6rem 1rem;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-            width: 260px;
-        }
-        select:focus {
-            outline: none;
-            border-color: #6459da;
-            box-shadow: 0 0 8px rgba(100, 89, 218, 0.4);
-        }
-        .hidden {
-            display: none;
-        }
-        .price-list {
-            margin-top: 24px;
-            max-width: 600px;
-            padding: 16px 24px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(100, 89, 218, 0.12);
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #374151; /* Gray-700 */
-        }
-        .price-list ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-        .price-list ul li {
-            margin: 8px 0;
-            border-bottom: 1px solid #e0e2ff;
-            padding-bottom: 6px;
-        }
-        h2 {
-            color: #4338ca;
-            margin-bottom: 12px;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-        p {
-            margin-top: 12px;
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-        p.note {
-            font-weight: 600;
-            color: #4b5563;
-        }
-        /* Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        #process-btn {
-            margin-top: 32px;
-            padding: 0.75rem 1.25rem;
-            font-weight: 700;
-            border-radius: 8px;
-            background-color: #10b981; /* Green-500 */
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            align-self: center;
-        }
-        #process-btn:hover,
-        #process-btn:focus {
-            background-color: #059669; /* Green-600 */
-            outline: none;
-        }
-        /* container for access and model selection */
-        #access-section {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZUUCASTER IT SOLUTION - Matrix Theme Price List</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    /* Reset & basic */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      user-select: none;
+      overflow-x: hidden;
+    }
+
+    /* Matrix code rain background */
+    canvas#matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      display: block;
+      background: black;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow:
+        0 0 6px #1aff1a,
+        0 0 10px #00ff00,
+        0 0 14px #00ff00,
+        0 0 40px #00ff00;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      font-weight: 600;
+      font-style: italic;
+      color: #55ff55aa;
+    }
+
+    main {
+      width: 100%;
+      max-width: 800px;
+      background-color: rgba(0, 50, 0, 0.85);
+      border: 2px solid #00ff00aa;
+      border-radius: 15px;
+      padding: 1.5rem 2rem;
+      box-shadow:
+        0 0 20px #00ff0022,
+        inset 0 0 30px #00ff0077;
+      font-size: 0.85rem;
+    }
+
+    section.services {
+      margin-bottom: 2rem;
+      line-height: 1.5;
+      color: #88ff88;
+    }
+
+    section.services h2 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #00ff00aa;
+      padding-bottom: 6px;
+      letter-spacing: 0.07em;
+    }
+
+    section.services ul {
+      list-style-type: none;
+      padding-left: 1rem;
+      counter-reset: matrixCounter;
+    }
+
+    section.services ul li {
+      position: relative;
+      padding-left: 1.3em;
+      margin-bottom: 0.5rem;
+    }
+
+    section.services ul li::before {
+      counter-increment: matrixCounter;
+      content: counter(matrixCounter, decimal-leading-zero) ".";
+      position: absolute;
+      left: 0;
+      color: #00cc00;
+      font-weight: 700;
+    }
+
+    label, select, input, button {
+      font-family: 'Share Tech Mono', monospace;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+      font-size: 0.9rem;
+      color: #00ff00dd;
+      text-shadow:
+        0 0 6px #00cc00bb;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      max-width: 280px;
+      background-color: black;
+      border: 1px solid #00ff00aa;
+      border-radius: 6px;
+      color: #00ff00;
+      font-size: 0.9rem;
+      padding: 0.6rem 1rem;
+      outline-offset: 4px;
+      outline-color: #33ff33aa;
+      box-shadow:
+        inset 0 0 8px #00ff00bb;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="text"]:focus, select:focus {
+      background-color: #001100;
+      outline-color: #00ff00ee;
+    }
+
+    button {
+      background-color: #006600;
+      color: #80ff80;
+      border: 2px solid transparent;
+      padding: 0.7rem 1.4rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow:
+        0 0 5px #00ff00aa;
+    }
+
+    button:hover, button:focus {
+      background-color: transparent;
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      box-shadow:
+        0 0 10px #00ff00ee,
+        0 0 20px #00ff00cc;
+      outline: none;
+    }
+
+    #model-selection {
+      display: none;
+      margin-top: 1.5rem;
+    }
+
+    #price-list, #telco-pricing {
+      background-color: black;
+      border-radius: 10px;
+      color: #00ff00cc;
+      font-size: 0.85rem;
+      margin-top: 2rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+      border: 1px solid #00ff0044;
+      box-shadow:
+        0 0 15px #00ff0055,
+        inset 0 0 10px #00ff0077;
+      display: none;
+      line-height: 1.3;
+    }
+
+    #price-list h2, #telco-pricing h2 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px dotted #00ff0077;
+      padding-bottom: 5px;
+      letter-spacing: 0.05em;
+    }
+
+    #price-list ul, #telco-pricing ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    #price-list ul li, #telco-pricing ul li {
+      border-bottom: 1px dashed #00ff0055;
+      padding: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #price-list ul li:last-child, #telco-pricing ul li:last-child {
+      border-bottom: none;
+    }
+
+    #process-btn {
+      display: none;
+      margin: 2rem auto 0;
+      padding: 0.8rem 2rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      background-color: #007b00;
+      color: #80ff80;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      box-shadow:
+        0 0 8px #00ff00bb;
+      border: 1px solid #00ff00aa;
+      text-transform: uppercase;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+
+    #process-btn.visible {
+      display: block;
+    }
+
+    #process-btn:hover, #process-btn:focus {
+      background-color: transparent;
+      color: #00ff00;
+      border-color: #00ff00;
+      box-shadow:
+        0 0 12px #00ff00dd,
+        0 0 24px #00ff00aa;
+      outline: none;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: #002200;
+      padding: 2rem;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      color: #00ff00dd;
+      box-shadow: 0 0 25px #00ff00aa;
+      position: relative;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: 'Orbitron', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .modal-content h2 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #55ff55;
+      text-shadow: 0 0 12px #00ff00cc;
+    }
+
+    .modal-content p {
+      margin: 0.6rem 0 1.5rem;
+    }
+
+    .modal-content label {
+      font-weight: 700;
+      color: #77ff77;
+      margin-bottom: 0.5rem;
+      display: block;
+      font-size: 0.8rem;
+    }
+
+    .modal-content input[type="text"] {
+      width: 100%;
+      padding: 0.55rem 1rem;
+      border-radius: 14px;
+      border: none;
+      background: rgba(0, 255, 0, 0.15);
+      color: #b3ffb3;
+      font-weight: 600;
+      font-size: 0.8rem;
+      outline-offset: 3px;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 0 4px #44ff44;
+    }
+
+    .modal-content input[type="text"]::placeholder {
+      color: #aaffaa;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 20px;
+      font-weight: 900;
+      color: #002200;
+      font-size: 1rem;
+      background-color: #00ff00;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00ff00aa;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .modal-content button:hover,
+    .modal-content button:focus {
+      background-color: #00cc00;
+      outline: none;
+      color: #001800;
+      box-shadow: 0 0 25px #00cc00cc;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 1.6rem;
+      color: #55ff55;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s ease;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: #bbffbb;
+      outline: none;
+    }
+
+    /* Scrollbars for lists */
+    #price-list ul::-webkit-scrollbar,
+    #telco-pricing ul::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #price-list ul::-webkit-scrollbar-track,
+    #telco-pricing ul::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #price-list ul::-webkit-scrollbar-thumb,
+    #telco-pricing ul::-webkit-scrollbar-thumb {
+      background-color: #00ff00aa;
+      border-radius: 3px;
+      border: 1px solid #001100;
+    }
+  </style>
 </head>
+
 <body>
+  <canvas id="matrixCanvas"></canvas>
 
-    <header class="logo-header" role="banner" aria-label="ZUUCASTER IT SOLUTION Company Logo">
-        ZUUCASTER
-        <span class="subtitle">IT SOLUTION</span>
-    </header>
+  <header>
+    <h1>ZuuCaster</h1>
+    <p>Your trusted partner for unlocking, hardware repairs & software development services.</p>
+  </header>
 
-    <main id="access-section">
-        <label for="access-code">Enter Access Code:</label>
-        <input
-            type="text"
-            id="access-code"
-            aria-label="Enter access code"
-            placeholder="Enter code here"
-            autocomplete="off"
-        />
-        <button type="button" onclick="checkAccess()" aria-label="Check Price">
-            Check Price
-        </button>
+  <main>
+    <section class="services" aria-label="Our services offered">
+      <h2>Our Services</h2>
+      <ul>
+        <li>Software Developer Services</li>
+        <li>Unlock FRP</li>
+        <li>Unlock Google</li>
+        <li>Unlock Xiaomi account</li>
+        <li>Unlock Telco/Contract device</li>
+        <li>Unlock pin/passcode</li>
+        <li>Reset Apple ID</li>
+        <li>Rent tool software</li>
+        <li>TUTUP BLACKLIST TELCO KEKAL</li>
+        <li>AUTH FLASHER + FILE REQUEST</li>
+        <li>Samsung IMEI unlock by Server</li>
+      </ul>
+    </section>
 
-        <div id="model-selection" class="hidden" aria-live="polite" style="margin-top: 24px;">
-            <h2>Select Model</h2>
-            <select id="model" aria-label="Select device model" onchange="showPriceList()">
-                <option value="">--Select Model--</option>
-                <option value="oppo">OPPO</option>
-                <option value="vivo">VIVO</option>
-                <option value="honor">HONOR</option>
-            </select>
-        </div>
+    <label for="access-code">Enter Access Code:</label>
+    <input type="text" id="access-code" placeholder="Enter code here" autocomplete="off" />
+    <button type="button" onclick="checkAccess()">Submit Process</button>
 
-        <section id="price-list" class="price-list hidden" aria-live="polite"></section>
-
-        <section id="telco-pricing" class="price-list hidden" aria-live="polite" style="margin-top: 24px;">
-            <h2>TELCO Unlock Pricing</h2>
-            <ul>
-                <li>REALME C21 - RM50</li>
-                <li>REALME C20 - RM50</li>
-                <li>REALME C53 - RM60</li>
-                <li>REALME C55 - RM60</li>
-                <li>REALME NOTE50 - RM100</li>
-                <li>REALME NOTE60 - RM100</li>
-                <li>REALME 11 - RM80 (ANDROID 14)</li>
-                <li>REALME 11 - RM130 (ANDROID 15)</li>
-                <li>REALME 12X - RM150 (ANDROID 14)</li>
-                <li>REALME 12X - RM200 (ANDROID 15)</li>
-                <li>REALME 14X - RM200</li>
-                <li>REALME 12 - RM200</li>
-                <li>REALME 13 - RM200</li>
-                <li>REALME 12 PRO - RM250</li>
-            </ul>
-            <p class="note">- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
-            <p class="note">- No refund after processing.</p>
-            <p class="note">- No cancellation after service in progress.</p>
-        </section>
-    </main>
-
-    <!-- Process Selection Button at bottom -->
-    <button id="process-btn" class="hidden" onclick="openModal()">
-        Process Selection
-    </button>
-
-    <!-- Modal for Submission -->
-    <div id="myModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()" aria-label="Close">&times;</span>
-            <h2 id="modal-title">Submit Your Selection</h2>
-            <p id="selected-model"></p>
-            <label for="user-name">Your Name:</label>
-            <input type="text" id="user-name" placeholder="Enter your name" aria-required="true" />
-            <button onclick="submitForm()">Send to WhatsApp</button>
-        </div>
+    <div id="model-selection" aria-live="polite">
+      <h2>Select Model</h2>
+      <select id="model" onchange="showPriceList()">
+        <option value="">--Select Model--</option>
+        <option value="oppo">OPPO</option>
+        <option value="vivo">VIVO</option>
+        <option value="honor">HONOR</option>
+      </select>
     </div>
 
-<script>
-    function checkAccess() {
-        const accessCodeInput = document.getElementById('access-code');
-        const accessCode = accessCodeInput.value.trim().toLowerCase();
-        const modelSelection = document.getElementById('model-selection');
-        const priceListDiv = document.getElementById('price-list');
-        const telcoPricing = document.getElementById('telco-pricing');
-        const processBtn = document.getElementById('process-btn');
+    <section id="price-list" aria-live="polite"></section>
 
-        if (accessCode === 'zuucaster') {
-            modelSelection.classList.remove('hidden');
-            priceListDiv.classList.add('hidden');
-            priceListDiv.innerHTML = '';
-            telcoPricing.classList.add('hidden');
-            processBtn.classList.add('hidden');
-        } else {
-            alert('Invalid access code. Please try again.');
-            modelSelection.classList.add('hidden');
-            priceListDiv.classList.add('hidden');
-            priceListDiv.innerHTML = '';
-            telcoPricing.classList.add('hidden');
-            processBtn.classList.add('hidden');
-        }
+    <section id="telco-pricing" aria-live="polite" style="max-height: 220px; overflow-y: auto;">
+      <h2>TELCO Unlock Pricing</h2>
+      <ul>
+        <li>REALME C21 - RM50</li>
+        <li>REALME C20 - RM50</li>
+        <li>REALME C53 - RM60</li>
+        <li>REALME C55 - RM60</li>
+        <li>REALME NOTE50 - RM100</li>
+        <li>REALME NOTE60 - RM100</li>
+        <li>REALME 11 - RM80 (ANDROID 14)</li>
+        <li>REALME 11 - RM130 (ANDROID 15)</li>
+        <li>REALME 12X - RM150 (ANDROID 14)</li>
+        <li>REALME 12X - RM200 (ANDROID 15)</li>
+        <li>REALME 14X - RM200</li>
+        <li>REALME 12 - RM200</li>
+        <li>REALME 13 - RM200</li>
+        <li>REALME 12 PRO - RM250</li>
+      </ul>
+      <p>- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
+      <p>- No refund after processing.</p>
+      <p>- No cancellation after service in progress.</p>
+    </section>
+
+    <button id="process-btn">Process Selection</button>
+  </main>
+
+  <div id="myModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button class="close-btn" aria-label="Close modal" onclick="closeModal()">&times;</button>
+      <h2 id="modal-title">Submit Your Selection</h2>
+      <p id="selected-model"></p>
+      <label for="user-name">Your Name:</label>
+      <input type="text" id="user-name" placeholder="Enter your name" aria-required="true" />
+      <button onclick="submitForm()">Send to WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let columns;
+    let drops = [];
+
+    const letters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴ0123456789';
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      columns = Math.floor(width / 14);
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100;
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#00ff00';
+      ctx.font = '14px Share Tech Mono, monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        const x = i * 14;
+        const y = drops[i] * 14;
+
+        // Bright head
+        ctx.fillStyle = '#aaffaa';
+        ctx.fillText(text, x, y);
+
+        // Move drop down
+        drops[i] += 1;
+
+        if (y > height && Math.random() > 0.975) drops[i] = 0;
+      }
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    setInterval(draw, 50);
+
+    // Application logic
+
+    document.getElementById('model-selection').style.display = 'none';
+    document.getElementById('price-list').style.display = 'none';
+    document.getElementById('telco-pricing').style.display = 'none';
+    document.getElementById('process-btn').style.display = 'none';
+
+    function checkAccess() {
+      const code = document.getElementById('access-code').value.trim().toLowerCase();
+      const modelSelection = document.getElementById('model-selection');
+      const priceList = document.getElementById('price-list');
+      const telcoPricing = document.getElementById('telco-pricing');
+      const processBtn = document.getElementById('process-btn');
+
+      if (code === 'zuucaster') {
+        modelSelection.style.display = 'block';
+        priceList.style.display = 'none';
+        priceList.innerHTML = '';
+        telcoPricing.style.display = 'none';
+        processBtn.style.display = 'none';
+      } else {
+        alert('Invalid access code. Please try again.');
+        modelSelection.style.display = 'none';
+        priceList.style.display = 'none';
+        priceList.innerHTML = '';
+        telcoPricing.style.display = 'none';
+        processBtn.style.display = 'none';
+      }
     }
 
     function showPriceList() {
-        const model = document.getElementById('model').value;
-        const priceListDiv = document.getElementById('price-list');
-        const processBtn = document.getElementById('process-btn');
-        priceListDiv.innerHTML = '';
+      const model = document.getElementById('model').value;
+      const priceList = document.getElementById('price-list');
+      const telcoPricing = document.getElementById('telco-pricing');
+      const processBtn = document.getElementById('process-btn');
 
-        if (!model) {
-            priceListDiv.classList.add('hidden');
-            document.getElementById('telco-pricing').classList.add('hidden');
-            processBtn.classList.add('hidden');
-            return;
-        }
+      if (!model) {
+        priceList.style.display = 'none';
+        priceList.innerHTML = '';
+        telcoPricing.style.display = 'none';
+        processBtn.style.display = 'none';
+        return;
+      }
 
-        let html = '';
-        if (model === 'oppo') {
-            html = `
-                <h2>Price List for OPPO</h2>
-                <ul>
-                    <li>OPPO A16 - RM100</li>
-                    <li>OPPO A16K - RM100</li>
-                    <li>OPPO A17 - RM100</li>
-                    <li>OPPO A18 - RM100</li>
-                    <li>OPPO A38 - RM100 (ANDROID 14)</li>
-                    <li>OPPO A38 - RM150 (ANDROID 15)</li>
-                    <li>OPPO A54 - RM100</li>
-                    <li>OPPO A57 - RM100</li>
-                    <li>OPPO A77 - RM100</li>
-                    <li>OPPO A78 - RM150</li>
-                    <li>OPPO A79 - RM150</li>
-                    <li>OPPO RENO 5PRO - RM150</li>
-                    <li>OPPO RENO 6/6Z - RM150</li>
-                    <li>OPPO RENO 8 - RM150</li>
-                    <li>OPPO RENO 8 PRO - RM180</li>
-                    <li>OPPO RENO 10 - RM150</li>
-                    <li>OPPO RENO 11 - RM150</li>
-                    <li>OPPO RENO 12 PRO - RM180</li>
-                    <li>OPPO RENO 11F - RM150</li>
-                    <li>OPPO RENO 12F - RM200</li>
-                    <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
-                    <li>OPPO A3PRO/A60 - RM200</li>
-                    <li>OPPO A3 - RM150</li>
-                </ul>
-            `;
-        } else if (model === 'vivo') {
-            html = `
-                <h2>Price List for VIVO</h2>
-                <ul>
-                    <li>VIVO Y03 - RM170</li>
-                    <li>VIVO Y20 - RM70</li>
-                    <li>VIVO Y16 - RM130</li>
-                    <li>VIVO Y36 - RM180</li>
-                    <li>VIVO Y27 - RM200</li>
-                    <li>VIVO Y28S - RM230</li>
-                    <li>VIVO Y77 - RM200</li>
-                    <li>VIVO Y30 - RM200</li>
-                    <li>VIVO V23 - RM200</li>
-                    <li>VIVO V40 LITE - RM350</li>
-                </ul>
-            `;
-        } else if (model === 'honor') {
-            html = `
-                <h2>Price List for HONOR</h2>
-                <p>HONOR pricing and details will be available soon.</p>
-            `;
-        }
+      let html = '';
+      switch (model) {
+        case 'oppo':
+          html = `<h2>Price List for OPPO</h2><ul>
+            <li>OPPO A16 - RM100</li>
+            <li>OPPO A16K - RM100</li>
+            <li>OPPO A17 - RM100</li>
+            <li>OPPO A18 - RM100</li>
+            <li>OPPO A38 - RM100 (ANDROID 14)</li>
+            <li>OPPO A38 - RM150 (ANDROID 15)</li>
+            <li>OPPO A54 - RM100</li>
+            <li>OPPO A57 - RM100</li>
+            <li>OPPO A77 - RM100</li>
+            <li>OPPO A78 - RM150</li>
+            <li>OPPO A79 - RM150</li>
+            <li>OPPO RENO 5PRO - RM150</li>
+            <li>OPPO RENO 6/6Z - RM150</li>
+            <li>OPPO RENO 8 - RM150</li>
+            <li>OPPO RENO 8 PRO - RM180</li>
+            <li>OPPO RENO 10 - RM150</li>
+            <li>OPPO RENO 11 - RM150</li>
+            <li>OPPO RENO 12 PRO - RM180</li>
+            <li>OPPO RENO 11F - RM150</li>
+            <li>OPPO RENO 12F - RM200</li>
+            <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
+            <li>OPPO A3PRO/A60 - RM200</li>
+            <li>OPPO A3 - RM150</li>
+          </ul>`;
+          break;
+        case 'vivo':
+          html = `<h2>Price List for VIVO</h2><ul>
+            <li>VIVO Y03 - RM170</li>
+            <li>VIVO Y20 - RM70</li>
+            <li>VIVO Y16 - RM130</li>
+            <li>VIVO Y36 - RM180</li>
+            <li>VIVO Y27 - RM200</li>
+            <li>VIVO Y28S - RM230</li>
+            <li>VIVO Y77 - RM200</li>
+            <li>VIVO Y30 - RM200</li>
+            <li>VIVO V23 - RM200</li>
+            <li>VIVO V40 LITE - RM350</li>
+          </ul>`;
+          break;
+        case 'honor':
+          html = `<h2>Price List for HONOR</h2><p>HONOR pricing and details will be available soon.</p>`;
+          break;
+        default:
+          html = '';
+      }
 
-        priceListDiv.innerHTML = html;
-        priceListDiv.classList.remove('hidden');
-        document.getElementById('telco-pricing').classList.remove('hidden');
-
-        // Show Process button when a model is selected
-        processBtn.classList.remove('hidden');
+      priceList.innerHTML = html;
+      priceList.style.display = 'block';
+      telcoPricing.style.display = 'block';
+      processBtn.style.display = 'block';
     }
 
     function openModal() {
-        const modelSelect = document.getElementById('model');
-        const selectedModel = modelSelect.options[modelSelect.selectedIndex].text;
-        document.getElementById('selected-model').innerText = `You selected: ${selectedModel}`;
-        document.getElementById('myModal').style.display = "block";
+      const modelSelect = document.getElementById('model');
+      const selectedModelText = modelSelect.options[modelSelect.selectedIndex].text;
+      document.getElementById('selected-model').innerText = `You selected: ${selectedModelText}`;
+      document.getElementById('myModal').classList.add('show');
     }
 
     function closeModal() {
-        document.getElementById('myModal').style.display = "none";
+      document.getElementById('myModal').classList.remove('show');
     }
 
     function submitForm() {
-        const userName = document.getElementById('user-name').value.trim();
-        const modelSelect = document.getElementById('model');
-        const selectedModelText = modelSelect.options[modelSelect.selectedIndex].text;
-        const caseNumber = Math.floor(10000 + Math.random() * 90000); // Generate a 5-digit case number
-
-        if (userName === "") {
-            alert("Please enter your name.");
-            return;
-        }
-
-        const message = `Case Number: ${caseNumber}\nName: ${userName}\nSelected Model: ${selectedModelText}`;
-        const whatsappLink = `https://wa.me/60178040403?text=${encodeURIComponent(message)}`;
-        
-        // Open WhatsApp with the message
-        window.open(whatsappLink, '_blank');
-        closeModal();
+      const userName = document.getElementById('user-name').value.trim();
+      if (!userName) {
+        alert('Please enter your name.');
+        return;
+      }
+      const modelSelect = document.getElementById('model');
+      const selectedModelText = modelSelect.options[modelSelect.selectedIndex].text;
+      const caseNumber = Math.floor(10000 + Math.random() * 90000);
+      const message = `Case Number: ${caseNumber}\nName: ${userName}\nSelected Model: ${selectedModelText}`;
+      const whatsappLink = `https://wa.me/60178040403?text=${encodeURIComponent(message)}`;
+      window.open(whatsappLink, '_blank');
+      closeModal();
     }
 
-    // Close modal when clicking outside modal content
-    window.onclick = function(event) {
-        const modal = document.getElementById('myModal');
-        if (event.target === modal) {
-            closeModal();
-        }
-    }
-</script>
-
+    window.onclick = function (e) {
+      const modal = document.getElementById('myModal');
+      if (e.target === modal) closeModal();
+    };
+  </script>
 </body>
-</html>
 
+</html>
