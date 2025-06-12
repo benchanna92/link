@@ -1,512 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Telco Unlock Pricelist - Zuucaster IT Solution</title>
-<style>
-  /* Reset and base */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    background: #ffffff;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #374151;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  header {
-    position: sticky;
-    top: 0;
-    background: #ffffffcc;
-    backdrop-filter: saturate(180%) blur(10px);
-    border-bottom: 1px solid #e5e7eb;
-    z-index: 100;
-  }
-
-  .header-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: #111827;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .logo img {
-    width: 32px;
-    height: 32px;
-  }
-
-  main {
-    flex-grow: 1;
-    max-width: 1200px;
-    margin: 2rem auto 4rem;
-    padding: 0 2rem;
-    width: 100%;
-  }
-
-  .hero {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding-bottom: 3rem;
-  }
-
-  .hero h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-  }
-
-  .hero p {
-    font-size: 1.125rem;
-    color: #6b7280;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-  }
-
-  .access-form {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    max-width: 450px;
-    margin: 0 auto;
-  }
-
-  .access-form input[type="text"] {
-    flex-grow: 1;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.75rem;
-    transition: border-color 0.3s ease;
-    outline-offset: 2px;
-    outline-color: transparent;
-  }
-
-  .access-form input[type="text"]:focus {
-    border-color: #4b5563;
-    outline-color: #4b5563;
-  }
-
-  .access-form button {
-    background-color: #111827;
-    border: none;
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0 1.5rem;
-    border-radius: 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    min-width: 120px;
-  }
-
-  .access-form button:hover:not(:disabled) {
-    background-color: #374151;
-    transform: translateY(-2px);
-  }
-
-  .access-form button:disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .message {
-    margin-top: 1rem;
-    color: #dc2626;
-    font-weight: 600;
-  }
-
-  .content-container {
-    max-width: 900px;
-    margin: 0 auto;
-    display: none;
-    flex-direction: column;
-    gap: 3rem;
-  }
-
-  /* Model selection section */
-  .model-select-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  label[for="model-select"] {
-    font-weight: 600;
-    color: #111827;
-    font-size: 1.125rem;
-  }
-
-  select {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 0.75rem;
-    border: 1px solid #d1d5db;
-    outline-offset: 2px;
-    outline-color: transparent;
-    transition: border-color 0.3s ease;
-    max-width: 300px;
-  }
-
-  select:focus {
-    border-color: #4b5563;
-    outline-color: #4b5563;
-  }
-
-  /* Pricelist card */
-  .pricelist-card {
-    background: #f9fafb;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    padding: 2rem;
-  }
-
-  .pricelist-card h2 {
-    font-weight: 700;
-    font-size: 2rem;
-    color: #111827;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 12px;
-    font-size: 1rem;
-  }
-
-  thead tr {
-    border-bottom: 2px solid #d1d5db;
-  }
-
-  thead th {
-    text-align: left;
-    padding-bottom: 0.5rem;
-    font-weight: 600;
-    color: #374151;
-  }
-
-  tbody tr {
-    background: white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    border-radius: 0.75rem;
-  }
-
-  tbody td {
-    padding: 0.75rem 1rem;
-    color: #4b5563;
-  }
-
-  tbody tr:hover {
-    background-color: #f3f4f6;
-    transition: background-color 0.3s ease;
-  }
-
-  /* Notes section */
-  .notes {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-    text-align: center;
-    white-space: pre-line;
-  }
-
-  /* Responsive */
-  @media (max-width: 640px) {
-    .hero h1 {
-      font-size: 2.4rem;
-    }
-    .access-form {
-      flex-direction: column;
-      max-width: 100%;
-    }
-    .access-form button {
-      min-width: 100%;
-      padding: 0.75rem;
-    }
-    .access-form input[type="text"] {
-      flex-grow: 0;
-      width: 100%;
-    }
-    table, thead, tbody, tr, th, td {
-      display: block;
-      width: 100%;
-    }
-    thead tr {
-      display: none;
-    }
-    tbody tr {
-      margin-bottom: 1rem;
-      box-shadow: none;
-      border-radius: 0;
-      background: transparent;
-    }
-    tbody td {
-      padding-left: 50%;
-      position: relative;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    tbody td::before {
-      position: absolute;
-      top: 50%;
-      left: 1rem;
-      transform: translateY(-50%);
-      font-weight: 600;
-      color: #374151;
-      white-space: nowrap;
-    }
-    tbody td:nth-of-type(1)::before { content: "Item"; }
-    tbody td:nth-of-type(2)::before { content: "Price"; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price List Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .price-list {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <div class="header-container" role="banner">
-    <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cdf17e60-be4e-4c67-ad7f-0583bb655342.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
-      Zuucaster IT Solution
-    </a>
-  </div>
-</header>
 
-<main>
-  <section class="hero" aria-labelledby="hero-title">
-    <h1 id="hero-title">Access Our Telco Unlock Price List</h1>
-    <p>Enter the access code to view and select device model unlock prices.</p>
-    <form id="access-form" class="access-form" aria-describedby="form-message" novalidate>
-      <label for="access-code" class="visually-hidden">Access Code</label>
-      <input type="text" id="access-code" name="access-code" placeholder="Enter access code" autocomplete="off" aria-required="true" aria-describedby="form-message" />
-      <button type="submit" id="submit-btn" disabled>Unlock</button>
-    </form>
-    <div id="form-message" class="message" role="alert" aria-live="assertive"></div>
-  </section>
+<h1>Price List Checker</h1>
 
-  <section class="content-container" id="content-container" aria-live="polite" aria-atomic="true">
+<label for="access-code">Enter Access Code:</label>
+<input type="text" id="access-code" placeholder="Enter code here">
+<button onclick="checkAccess()">Submit</button>
 
-    <section class="model-select-section" aria-labelledby="model-select-label">
-      <label for="model-select" id="model-select-label">Select Your Brand:</label>
-      <select id="model-select" aria-describedby="model-description">
-        <option value="" disabled selected>Select a brand</option>
-        <option value="OPPO">OPPO</option>
-        <option value="REALME">REALME</option>
-        <option value="VIVO">VIVO</option>
-        <option value="HONOR">HONOR</option>
-      </select>
-      <p id="model-description" style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">Choose your phone brand to view unlock prices.</p>
-    </section>
+<div id="model-selection" class="hidden">
+    <h2>Select Model</h2>
+    <select id="model" onchange="showPriceList()">
+        <option value="">--Select Model--</option>
+        <option value="oppo">OPPO</option>
+        <option value="vivo">VIVO</option>
+        <option value="realme">REALME</option>
+        <option value="honor">HONOR</option>
+    </select>
+</div>
 
-    <section class="pricelist-card" id="pricelist-card" aria-labelledby="pricelist-title" hidden>
-      <h2 id="pricelist-title">Unlock Price List</h2>
-      <table id="pricelist-table" role="table" aria-describedby="pricelist-description">
-        <thead>
-          <tr>
-            <th scope="col">Model</th>
-            <th scope="col">Price (RM)</th>
-            <th scope="col">Dealer Price (RM)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Populated dynamically -->
-        </tbody>
-      </table>
-      <p id="pricelist-description" class="sr-only">Unlock price list for the selected brand.</p>
-      <div class="notes" id="notes-text">
-        <!-- Notes updated dynamically -->
-      </div>
-    </section>
+<div id="price-list" class="price-list hidden"></div>
 
-  </section>
-</main>
+<div id="telco-pricing" class="hidden">
+    <h2>TELCO Unlock Pricing</h2>
+    <ul>
+        <li>REALME C21 - RM50</li>
+        <li>REALME C20 - RM50</li>
+        <li>REALME C53 - RM60</li>
+        <li>REALME C55 - RM60</li>
+        <li>REALME NOTE50 - RM100</li>
+        <li>REALME NOTE60 - RM100</li>
+        <li>REALME 11 - RM80 (ANDROID 14)</li>
+        <li>REALME 11 - RM130 (ANDROID 15)</li>
+        <li>REALME 12X - RM150 (ANDROID 14)</li>
+        <li>REALME 12X - RM200 (ANDROID 15)</li>
+        <li>REALME 14X - RM200</li>
+        <li>REALME 12 - RM200</li>
+        <li>REALME 13 - RM200</li>
+        <li>REALME 12 PRO - RM250</li>
+    </ul>
+    <p>- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
+    <p>- No refund after processing.</p>
+    <p>- No cancellation after service in progress.</p>
+</div>
 
 <script>
-  (function() {
-    const ACCESS_CODE = 'dealer';
-    const form = document.getElementById('access-form');
-    const input = document.getElementById('access-code');
-    const submitBtn = document.getElementById('submit-btn');
-    const message = document.getElementById('form-message');
-    const contentContainer = document.getElementById('content-container');
-    const modelSelect = document.getElementById('model-select');
-    const pricelistCard = document.getElementById('pricelist-card');
-    const pricelistTableBody = document.querySelector('#pricelist-table tbody');
-    const notesText = document.getElementById('notes-text');
-
-    // Pricelist data for each brand (base prices)
-    const priceLists = {
-      "OPPO": [
-        {model: "OPPO A16", price: 100},
-        {model: "OPPO A16K", price: 100},
-        {model: "OPPO A17", price: 100},
-        {model: "OPPO A18", price: 100},
-        {model: "OPPO A38 (ANDROID 14)", price: 100},
-        {model: "OPPO A38 (ANDROID 15)", price: 150},
-        {model: "OPPO A54", price: 100},
-        {model: "OPPO A57", price: 100},
-        {model: "OPPO A77", price: 100},
-        {model: "OPPO A78", price: 150},
-        {model: "OPPO A79", price: 150},
-        {model: "OPPO RENO 5PRO", price: 150},
-        {model: "OPPO RENO 6/6Z", price: 150},
-        {model: "OPPO RENO 8", price: 150},
-        {model: "OPPO RENO 8 PRO", price: 180},
-        {model: "OPPO RENO 10", price: 150},
-        {model: "OPPO RENO 11", price: 150},
-        {model: "OPPO RENO 12 PRO", price: 180},
-        {model: "OPPO RENO 11F", price: 150},
-        {model: "OPPO RENO 12F", price: 200},
-        {model: "OPPO RENO 13F (MEDIATEK)", price: 250},
-        {model: "OPPO A3PRO/A60", price: 200},
-        {model: "OPPO A3", price: 150}
-      ],
-      "REALME": [
-        {model: "REALME C21", price: 50},
-        {model: "REALME C20", price: 50},
-        {model: "REALME C53", price: 60},
-        {model: "REALME C55", price: 60},
-        {model: "REALME NOTE50", price: 100},
-        {model: "REALME NOTE60", price: 100},
-        {model: "REALME 11 (ANDROID 14)", price: 80},
-        {model: "REALME 11 (ANDROID 15)", price: 130},
-        {model: "REALME 12X (ANDROID 14)", price: 150},
-        {model: "REALME 12X (ANDROID 15)", price: 200},
-        {model: "REALME 14X", price: 200},
-        {model: "REALME 12", price: 200},
-        {model: "REALME 13", price: 200},
-        {model: "REALME 12 PRO", price: 250}
-      ],
-      "VIVO": [
-        {model: "VIVO Y03", price: 170},
-        {model: "VIVO Y20", price: 70},
-        {model: "VIVO Y16", price: 130},
-        {model: "VIVO Y36", price: 180},
-        {model: "VIVO Y27", price: 200},
-        {model: "VIVO Y28S", price: 230},
-        {model: "VIVO Y77", price: 200},
-        {model: "VIVO Y30", price: 200},
-        {model: "VIVO V23", price: 200},
-        {model: "VIVO V40 LITE", price: 350}
-      ],
-      "HONOR": []
-    };
-
-    // Notes for brands
-    const defaultNotes =
-      "No refunds after processing.\nNo cancellations after service in progress.";
-    const vivoHonorNotes =
-      "HONOR and VIVO process need 1-14 days depending on available CPU to replace.\n" +
-      "No refunds after processing.\n" +
-      "No cancellations after service in progress.\n" +
-      "If you have laptop or PC we can do Remotely using ULTRAVIEW software.";
-
-    // Enable submit if input not empty
-    input.addEventListener('input', () => {
-      const value = input.value.trim();
-      submitBtn.disabled = value.length === 0;
-      message.textContent = '';
-    });
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const code = input.value.trim().toLowerCase();
-
-      if (code === ACCESS_CODE) {
-        message.textContent = '';
-        form.hidden = true;
-        contentContainer.style.display = 'flex';
-        pricelistCard.hidden = true;
-        modelSelect.value = '';
-      } else {
-        message.textContent = 'Invalid access code, please try again.';
-        input.focus();
-      }
-    });
-
-    modelSelect.addEventListener('change', () => {
-      const brand = modelSelect.value;
-      pricelistTableBody.innerHTML = '';
-      if (priceLists.hasOwnProperty(brand)) {
-        const list = priceLists[brand];
-        if (list.length === 0) {
-          pricelistTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
+    function checkAccess() {
+        const accessCode = document.getElementById('access-code').value;
+        if (accessCode === 'zuucaster') {
+            document.getElementById('model-selection').classList.remove('hidden');
         } else {
-          list.forEach(item => {
-            const tr = document.createElement('tr');
-            const tdModel = document.createElement('td');
-            tdModel.textContent = item.model;
-            const tdPrice = document.createElement('td');
-            tdPrice.textContent = "RM" + item.price.toFixed(2);
-            const tdDealerPrice = document.createElement('td');
-            const dealerPrice = (item.price * 0.8);
-            tdDealerPrice.textContent = "RM" + dealerPrice.toFixed(2);
-            tr.appendChild(tdModel);
-            tr.appendChild(tdPrice);
-            tr.appendChild(tdDealerPrice);
-            pricelistTableBody.appendChild(tr);
-          });
+            alert('Invalid access code. Please try again.');
         }
-        pricelistCard.hidden = false;
+    }
 
-        // Update notes based on brand
-        if (brand === "VIVO" || brand === "HONOR") {
-          notesText.textContent = vivoHonorNotes;
-        } else {
-          notesText.textContent = defaultNotes;
+    function showPriceList() {
+        const model = document.getElementById('model').value;
+        const priceListDiv = document.getElementById('price-list');
+        priceListDiv.innerHTML = ''; // Clear previous content
+
+        if (model === 'oppo') {
+            priceListDiv.innerHTML = `
+                <h2>Price List for OPPO</h2>
+                <ul>
+                    <li>OPPO A16 - RM100</li>
+                    <li>OPPO A16K - RM100</li>
+                    <li>OPPO A17 - RM100</li>
+                    <li>OPPO A18 - RM100</li>
+                    <li>OPPO A38 - RM100 (ANDROID 14)</li>
+                    <li>OPPO A38 - RM150 (ANDROID 15)</li>
+                    <li>OPPO A54 - RM100</li>
+                    <li>OPPO A57 - RM100</li>
+                    <li>OPPO A77 - RM100</li>
+                    <li>OPPO A78 - RM150</li>
+                    <li>OPPO A79 - RM150</li>
+                    <li>OPPO RENO 5PRO - RM150</li>
+                    <li>OPPO RENO 6/6Z - RM150</li>
+                    <li>OPPO RENO 8 - RM150</li>
+                    <li>OPPO RENO 8 PRO - RM180</li>
+                    <li>OPPO RENO 10 - RM150</li>
+                    <li>OPPO RENO 11 - RM150</li>
+                    <li>OPPO RENO 12 PRO - RM180</li>
+                    <li>OPPO RENO 11F - RM150</li>
+                    <li>OPPO RENO 12F - RM200</li>
+                    <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
+                    <li>OPPO A3PRO/A60 - RM200</li>
+                    <li>OPPO A3 - RM150</li>
+                </ul>
+            `;
+        } else if (model === 'vivo') {
+            priceListDiv.innerHTML = `
+                <h2>Price List for VIVO</h2>
+                <ul>
+                    <li>VIVO Y03 - RM170</li>
+                    <li>VIVO Y20 - RM70</li>
+                    <li>VIVO Y16 - RM130</li>
+                    <li>VIVO Y36 - RM180</li>
+                    <li>VIVO Y27 - RM200</li>
+                    <li>VIVO Y28S - RM230</li>
+                    <li>VIVO Y77 - RM200</li>
+                    <li>VIVO Y30 - RM200</li>
+                    <li>VIVO V23 - RM200</li>
+                    <li>VIVO V40 LITE - RM350</li>
+                </ul>
+            `;
+        } else if (model === 'realme') {
+            priceListDiv.innerHTML = `
+                <h2>Price List for REALME</h2>
+                <ul>
+                    <li>REALME C21 - RM50</li>
+                    <li>REALME C20 - RM50</li>
+                    <li>REALME C53 - RM60</li>
+                    <li>REALME C55 - RM60</li>
+                    <li>REALME NOTE50 - RM100</li>
+                    <li>REALME NOTE60 - RM100</li>
+                    <li>REALME 11 - RM80 (ANDROID 14)</li>
+                    <li>REALME 11 - RM130 (ANDROID 15)</li>
+                    <li>REALME 12X - RM150 (ANDROID 14)</li>
+                    <li>REALME 12X - RM200 (ANDROID 15)</li>
+                    <li>REALME 14X - RM200</li>
+                    <li>REALME 12 - RM200</li>
+                    <li>REALME 13 - RM200</li>
+                    <li>REALME 12 PRO - RM250</li>
+                </ul>
+            `;
+        } else if (model === 'honor') {
+            priceListDiv.innerHTML = `
+                <h2>Price List for HONOR</h2>
+                <p>Details coming soon.</p>
+            `;
         }
-      } else {
-        pricelistCard.hidden = true;
-        notesText.textContent = '';
-      }
-    });
-  })();
+
+        priceListDiv.classList.remove('hidden');
+        document.getElementById('telco-pricing').classList.remove('hidden');
+    }
 </script>
 
-<style>
-  /* Visually hidden utility for accessibility */
-  .visually-hidden,
-  .sr-only {
-    border: 0 !important;
-    clip: rect(1px,1px,1px,1px) !important; 
-    -webkit-clip-path: inset(50%) !important;
-            clip-path: inset(50%) !important;
-    height: 1px !important; 
-    margin: -1px !important; 
-    overflow: hidden !important; 
-    padding: 0 !important; 
-    position: absolute !important; 
-    width: 1px !important; 
-    white-space: nowrap !important;
-  }
-</style>
 </body>
 </html>
-
