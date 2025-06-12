@@ -152,17 +152,15 @@
     gap: 3rem;
   }
 
-  /* Model selection section */
-  .model-select-section {
+  /* Model selection and form sections */
+  .model-select-section,
+  .user-details-section {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  label[for="model-select"],
-  label[for="user-name"],
-  label[for="user-location"],
-  label[for="user-issue"] {
+  label {
     font-weight: 600;
     color: #111827;
     font-size: 1.125rem;
@@ -224,6 +222,7 @@
     background: white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     border-radius: 0.75rem;
+    cursor: pointer;
   }
 
   tbody td {
@@ -244,17 +243,21 @@
     text-align: center;
   }
 
-  /* User detail form */
+  /* User detail form styles */
   .user-details-section {
     background: #f9fafb;
     border-radius: 0.75rem;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    display: none;
+  }
+
+  .user-details-section form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 600px;
-    margin: 0 auto;
   }
 
   .user-details-section button {
@@ -284,7 +287,6 @@
     color: #111827;
   }
 
-  /* Responsive */
   @media (max-width: 640px) {
     .hero h1 {
       font-size: 2.4rem;
@@ -333,6 +335,7 @@
     .user-details-section {
       max-width: 100%;
       padding: 1rem;
+      display: block !important;
     }
   }
 </style>
@@ -341,7 +344,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/63f14615-595d-4b31-90b7-b77234e9b285.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/446ebbfe-cf45-4456-baad-b0483bcb2376.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -531,7 +534,7 @@
         form.hidden = true;
         contentContainer.style.display = 'flex';
         pricelistCard.hidden = true;
-        userDetailsSection.hidden = true;
+        userDetailsSection.style.display = "none";
         modelSelect.value = '';
         selectedModelInput.value = '';
         userDetailsForm.reset();
@@ -544,7 +547,7 @@
     modelSelect.addEventListener('change', () => {
       const brand = modelSelect.value;
       pricelistTableBody.innerHTML = '';
-      userDetailsSection.hidden = true;
+      userDetailsSection.style.display = "none";
       selectedModelInput.value = '';
       if (priceLists.hasOwnProperty(brand)) {
         const list = priceLists[brand];
@@ -577,7 +580,7 @@
         const model = target.cells[0]?.textContent || '';
         if(model){
           selectedModelInput.value = model;
-          userDetailsSection.hidden = false;
+          userDetailsSection.style.display = "block";
           // Generate and set a random 6-digit case number
           caseNumberInput.value = generateCaseNumber();
           // Scroll to user details section for better UX
