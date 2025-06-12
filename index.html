@@ -337,7 +337,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://placehold.co/32x32/000000/ffffff?text=Z" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/459dd031-7944-4d34-afb6-0e391f0f2240.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -396,6 +396,16 @@
         <label for="user-name">Name:</label>
         <input type="text" id="user-name" name="user-name" placeholder="Your full name" required autocomplete="name" />
 
+        <!-- Selection for Model changed to brand selection -->
+        <label for="user-brand-select">Selection Model:</label>
+        <select id="user-brand-select" name="user-brand-select" required>
+          <option value="" disabled selected>Select your model brand</option>
+          <option value="HONOR">HONOR</option>
+          <option value="VIVO">VIVO</option>
+          <option value="OPPO">OPPO</option>
+          <option value="REALME">REALME</option>
+        </select>
+
         <label for="user-location">Location:</label>
         <select id="user-location" name="user-location" required>
           <option value="" disabled selected>Select your location</option>
@@ -413,10 +423,7 @@
           <option value="NEGERI SEMBILAN">NEGERI SEMBILAN</option>
         </select>
 
-        <label for="selected-model">Selected Model:</label>
-        <input type="text" id="selected-model" name="selected-model" readonly aria-readonly="true" />
-
-        <label for="case-number">Case Number:</label>
+        <label for="case-number">Case Number (Auto-generated 5-digit):</label>
         <input type="text" id="case-number" name="case-number" readonly aria-readonly="true" />
 
         <label for="user-issue">Issue:</label>
@@ -455,6 +462,7 @@
     const userDetailsSection = document.getElementById('user-details-section');
     const userDetailsForm = document.getElementById('user-details-form');
     const userNameInput = document.getElementById('user-name');
+    const userBrandSelect = document.getElementById('user-brand-select');
     const userLocationSelect = document.getElementById('user-location');
     const selectedModelInput = document.getElementById('selected-model');
     const caseNumberInput = document.getElementById('case-number');
@@ -484,4 +492,173 @@
         {model: "OPPO RENO 11", price: "RM150"},
         {model: "OPPO RENO 12 PRO", price: "RM180"},
         {model: "OPPO RENO 11F", price: "RM150"},
-        {model: "OPPO RENO 12F", price:
+        {model: "OPPO RENO 12F", price: "RM200"},
+        {model: "OPPO RENO 13F (MEDIATEK)", price: "RM250"},
+        {model: "OPPO A3PRO/A60", price: "RM200"},
+        {model: "OPPO A3", price: "RM150"}
+      ],
+      "REALME": [
+        {model: "REALME C21", price: "RM50"},
+        {model: "REALME C20", price: "RM50"},
+        {model: "REALME C53", price: "RM60"},
+        {model: "REALME C55", price: "RM60"},
+        {model: "REALME NOTE50", price: "RM100"},
+        {model: "REALME NOTE60", price: "RM100"},
+        {model: "REALME 11 (ANDROID 14)", price: "RM80"},
+        {model: "REALME 11 (ANDROID 15)", price: "RM130"},
+        {model: "REALME 12X (ANDROID 14)", price: "RM150"},
+        {model: "REALME 12X (ANDROID 15)", price: "RM200"},
+        {model: "REALME 14X", price: "RM200"},
+        {model: "REALME 12", price: "RM200"},
+        {model: "REALME 13", price: "RM200"},
+        {model: "REALME 12 PRO", price: "RM250"}
+      ],
+      "VIVO": [
+        {model: "VIVO Y03", price: "RM170"},
+        {model: "VIVO Y20", price: "RM70"},
+        {model: "VIVO Y16", price: "RM130"},
+        {model: "VIVO Y36", price: "RM180"},
+        {model: "VIVO Y27", price: "RM200"},
+        {model: "VIVO Y28S", price: "RM230"},
+        {model: "VIVO Y77", price: "RM200"},
+        {model: "VIVO Y30", price: "RM200"},
+        {model: "VIVO V23", price: "RM200"},
+        {model: "VIVO V40 LITE", price: "RM350"}
+      ],
+      "HONOR": []
+    };
+
+    // Enable submit if input not empty
+    input.addEventListener('input', () => {
+      const value = input.value.trim();
+      submitBtn.disabled = value.length === 0;
+      message.textContent = '';
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const code = input.value.trim().toLowerCase();
+
+      if (code === ACCESS_CODE) {
+        message.textContent = '';
+        form.hidden = true;
+        contentContainer.style.display = 'flex';
+        pricelistCard.hidden = true;
+        userDetailsSection.style.display = "none";
+        modelSelect.value = '';
+        selectedModelInput.value = '';
+        userDetailsForm.reset();
+      } else {
+        message.textContent = 'Invalid access code, please try again.';
+        input.focus();
+      }
+    });
+
+    modelSelect.addEventListener('change', () => {
+      const brand = modelSelect.value;
+      pricelistTableBody.innerHTML = '';
+      userDetailsSection.style.display = "none";
+      selectedModelInput.value = '';
+      if (priceLists.hasOwnProperty(brand)) {
+        const list = priceLists[brand];
+        if (list.length === 0) {
+          pricelistTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#9ca3af; font-weight:600;">No data available for selected brand.</td></tr>';
+        } else {
+          list.forEach(item => {
+            const tr = document.createElement('tr');
+            const tdModel = document.createElement('td');
+            tdModel.textContent = item.model;
+            const tdPrice = document.createElement('td');
+            tdPrice.textContent = item.price;
+            tr.appendChild(tdModel);
+            tr.appendChild(tdPrice);
+            pricelistTableBody.appendChild(tr);
+          });
+        }
+        pricelistCard.hidden = false;
+      } else {
+        pricelistCard.hidden = true;
+      }
+    });
+
+    pricelistTableBody.addEventListener('click', (event) => {
+      let target = event.target;
+      while(target && target.nodeName !== 'TR') {
+        target = target.parentNode;
+      }
+      if(target && target.nodeName === 'TR') {
+        const model = target.cells[0]?.textContent || '';
+        if(model){
+          selectedModelInput.value = model;
+          userDetailsSection.style.display = "block";
+          // Generate and set a random 5-digit case number
+          caseNumberInput.value = generateCaseNumber();
+          // Scroll to user details section for better UX
+          userDetailsSection.scrollIntoView({behavior:'smooth'});
+        }
+      }
+    });
+
+    function generateCaseNumber(){
+      return Math.floor(10000 + Math.random() * 90000).toString();
+    }
+
+    userDetailsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if(!userDetailsForm.checkValidity()){
+        userDetailsForm.reportValidity();
+        return;
+      }
+      const name = userNameInput.value.trim();
+      const location = userLocationSelect.value;
+      const brandSelection = userBrandSelect.value;
+      const model = selectedModelInput.value;
+      const caseNumber = caseNumberInput.value;
+      const issue = userIssueSelect.value;
+      const howToSubmit = howToSubmitSelect.value;
+      const whatsappNumber = '+60178040403';
+
+      let message = 
+        `Hello Zuucaster IT Solution,%0A` +
+        `I want to process an unlock.%0A` +
+        `Name: ${name}%0A` +
+        `Location: ${location}%0A` +
+        `Model Brand Selection: ${brandSelection}%0A` +
+        `Selected Model: ${model}%0A` +
+        `Case Number: ${caseNumber}%0A` +
+        `Issue: ${issue}%0A` +
+        `How to Submit: ${howToSubmit}`;
+
+      if(howToSubmit === "WHATSAPP"){
+        const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+      } else if(howToSubmit === "CONTACT_SUPPORT"){
+        alert("Please contact our support team directly for assistance.");
+      } else if(howToSubmit === "EMAIL"){
+        alert("Please send your details via email to support@zuucaster.com.");
+      }
+    });
+
+  })();
+</script>
+
+<style>
+  /* Visually hidden utility for accessibility */
+  .visually-hidden,
+  .sr-only {
+    border: 0 !important;
+    clip: rect(1px,1px,1px,1px) !important; 
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important; 
+    margin: -1px !important; 
+    overflow: hidden !important; 
+    padding: 0 !important; 
+    position: absolute !important; 
+    width: 1px !important; 
+    white-space: nowrap !important;
+  }
+</style>
+</body>
+</html>
+
