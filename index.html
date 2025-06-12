@@ -133,6 +133,41 @@
             font-weight: 600;
             color: #4b5563;
         }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -189,6 +224,18 @@
         <p class="note">- No refund after processing.</p>
         <p class="note">- No cancellation after service in progress.</p>
     </section>
+
+    <!-- Modal for Submission -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Submit Your Selection</h2>
+            <p id="selected-model"></p>
+            <label for="user-name">Your Name:</label>
+            <input type="text" id="user-name" placeholder="Enter your name" />
+            <button onclick="submitForm()">Send to WhatsApp</button>
+        </div>
+    </div>
 
 <script>
     function checkAccess() {
@@ -299,9 +346,38 @@
         priceListDiv.innerHTML = html;
         priceListDiv.classList.remove('hidden');
         document.getElementById('telco-pricing').classList.remove('hidden');
+
+        // Show the modal for submission
+        document.getElementById('selected-model').innerText = `You selected: ${model}`;
+        openModal();
+    }
+
+    function openModal() {
+        document.getElementById('myModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = "none";
+    }
+
+    function submitForm() {
+        const userName = document.getElementById('user-name').value.trim();
+        const model = document.getElementById('model').value;
+        const caseNumber = Math.floor(10000 + Math.random() * 90000); // Generate a 5-digit case number
+
+        if (userName === "") {
+            alert("Please enter your name.");
+            return;
+        }
+
+        const message = `Case Number: ${caseNumber}\nName: ${userName}\nSelected Model: ${model}`;
+        const whatsappLink = `https://wa.me/60178040403?text=${encodeURIComponent(message)}`;
+        
+        // Open WhatsApp with the message
+        window.open(whatsappLink, '_blank');
+        closeModal();
     }
 </script>
 
 </body>
 </html>
-
