@@ -159,13 +159,17 @@
     gap: 0.75rem;
   }
 
-  label[for="model-select"] {
+  label[for="model-select"],
+  label[for="user-name"],
+  label[for="user-location"],
+  label[for="user-issue"] {
     font-weight: 600;
     color: #111827;
     font-size: 1.125rem;
   }
 
-  select {
+  select,
+  input[type="text"] {
     padding: 0.75rem 1rem;
     font-size: 1rem;
     border-radius: 0.75rem;
@@ -176,7 +180,8 @@
     max-width: 300px;
   }
 
-  select:focus {
+  select:focus,
+  input[type="text"]:focus {
     border-color: #4b5563;
     outline-color: #4b5563;
   }
@@ -239,6 +244,46 @@
     text-align: center;
   }
 
+  /* User detail form */
+  .user-details-section {
+    background: #f9fafb;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .user-details-section button {
+    background-color: #111827;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    max-width: 200px;
+    align-self: center;
+  }
+
+  .user-details-section button:hover {
+    background-color: #374151;
+    transform: translateY(-2px);
+  }
+
+  .generated-case-number {
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.125rem;
+    margin-top: 0.5rem;
+    color: #111827;
+  }
+
   /* Responsive */
   @media (max-width: 640px) {
     .hero h1 {
@@ -285,6 +330,10 @@
     }
     tbody td:nth-of-type(1)::before { content: "Item"; }
     tbody td:nth-of-type(2)::before { content: "Price"; }
+    .user-details-section {
+      max-width: 100%;
+      padding: 1rem;
+    }
   }
 </style>
 </head>
@@ -292,7 +341,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cb9016f7-754c-43c6-9551-0ead2fad92e4.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/63f14615-595d-4b31-90b7-b77234e9b285.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -310,7 +359,7 @@
     <div id="form-message" class="message" role="alert" aria-live="assertive"></div>
   </section>
 
-  <section class="content-container" id="content-container" aria-live="polite" aria-atomic="true">
+  <section class="content-container" id="content-container" aria-live="polite" aria-atomic="true" tabindex="-1">
 
     <section class="model-select-section" aria-labelledby="model-select-label">
       <label for="model-select" id="model-select-label">Select Your Brand:</label>
@@ -345,6 +394,46 @@
       </div>
     </section>
 
+    <section class="user-details-section" id="user-details-section" aria-labelledby="user-details-title" hidden>
+      <h2 id="user-details-title" style="text-align:center; font-weight:700; font-size:1.75rem; color:#111827;">Enter Your Details to Proceed</h2>
+      <form id="user-details-form" novalidate>
+        <label for="user-name">Name:</label>
+        <input type="text" id="user-name" name="user-name" placeholder="Your full name" required autocomplete="name" />
+
+        <label for="user-location">Location:</label>
+        <select id="user-location" name="user-location" required>
+          <option value="" disabled selected>Select your location</option>
+          <option value="JOHOR">JOHOR</option>
+          <option value="KEDAH">KEDAH</option>
+          <option value="MELAKA">MELAKA</option>
+          <option value="PERAK">PERAK</option>
+          <option value="KUALA LUMPUR">KUALA LUMPUR</option>
+          <option value="PAHANG">PAHANG</option>
+          <option value="TERENGGANU">TERENGGANU</option>
+          <option value="PERLIS">PERLIS</option>
+          <option value="SABAH">SABAH</option>
+          <option value="SARAWAK">SARAWAK</option>
+          <option value="KELANTAN">KELANTAN</option>
+          <option value="NEGERI SEMBILAN">NEGERI SEMBILAN</option>
+        </select>
+
+        <label for="selected-model">Selected Model:</label>
+        <input type="text" id="selected-model" name="selected-model" readonly aria-readonly="true" />
+
+        <label for="case-number">Case Number:</label>
+        <input type="text" id="case-number" name="case-number" readonly aria-readonly="true" />
+
+        <label for="user-issue">Issue:</label>
+        <select id="user-issue" name="user-issue" required>
+          <option value="" disabled selected>Select issue type</option>
+          <option value="TELCO">TELCO</option>
+          <option value="SOFTWARE">SOFTWARE</option>
+        </select>
+
+        <button type="submit" id="submit-order-btn">Send to WhatsApp</button>
+      </form>
+    </section>
+
   </section>
 </main>
 
@@ -359,6 +448,14 @@
     const modelSelect = document.getElementById('model-select');
     const pricelistCard = document.getElementById('pricelist-card');
     const pricelistTableBody = document.querySelector('#pricelist-table tbody');
+    const userDetailsSection = document.getElementById('user-details-section');
+    const userDetailsForm = document.getElementById('user-details-form');
+    const userNameInput = document.getElementById('user-name');
+    const userLocationSelect = document.getElementById('user-location');
+    const selectedModelInput = document.getElementById('selected-model');
+    const caseNumberInput = document.getElementById('case-number');
+    const userIssueSelect = document.getElementById('user-issue');
+    const submitOrderBtn = document.getElementById('submit-order-btn');
 
     // Pricelist data for each brand
     const priceLists = {
@@ -434,7 +531,10 @@
         form.hidden = true;
         contentContainer.style.display = 'flex';
         pricelistCard.hidden = true;
+        userDetailsSection.hidden = true;
         modelSelect.value = '';
+        selectedModelInput.value = '';
+        userDetailsForm.reset();
       } else {
         message.textContent = 'Invalid access code, please try again.';
         input.focus();
@@ -444,6 +544,8 @@
     modelSelect.addEventListener('change', () => {
       const brand = modelSelect.value;
       pricelistTableBody.innerHTML = '';
+      userDetailsSection.hidden = true;
+      selectedModelInput.value = '';
       if (priceLists.hasOwnProperty(brand)) {
         const list = priceLists[brand];
         if (list.length === 0) {
@@ -465,6 +567,55 @@
         pricelistCard.hidden = true;
       }
     });
+
+    pricelistTableBody.addEventListener('click', (event) => {
+      let target = event.target;
+      while(target && target.nodeName !== 'TR') {
+        target = target.parentNode;
+      }
+      if(target && target.nodeName === 'TR') {
+        const model = target.cells[0]?.textContent || '';
+        if(model){
+          selectedModelInput.value = model;
+          userDetailsSection.hidden = false;
+          // Generate and set a random 6-digit case number
+          caseNumberInput.value = generateCaseNumber();
+          // Scroll to user details section for better UX
+          userDetailsSection.scrollIntoView({behavior:'smooth'});
+        }
+      }
+    });
+
+    function generateCaseNumber(){
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    userDetailsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if(!userDetailsForm.checkValidity()){
+        userDetailsForm.reportValidity();
+        return;
+      }
+      const name = userNameInput.value.trim();
+      const location = userLocationSelect.value;
+      const model = selectedModelInput.value;
+      const caseNumber = caseNumberInput.value;
+      const issue = userIssueSelect.value;
+      const whatsappNumber = '+60178040403';
+
+      const message = 
+        `Hello Zuucaster IT Solution,%0A` +
+        `I want to process an unlock.%0A` +
+        `Name: ${name}%0A` +
+        `Location: ${location}%0A` +
+        `Selected Model: ${model}%0A` +
+        `Case Number: ${caseNumber}%0A` +
+        `Issue: ${issue}`;
+
+      const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    });
+
   })();
 </script>
 
