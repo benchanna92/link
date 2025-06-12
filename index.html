@@ -279,14 +279,11 @@
     transform: translateY(-2px);
   }
 
-  .generated-case-number {
-    font-weight: 600;
-    text-align: center;
-    font-size: 1.125rem;
-    margin-top: 0.5rem;
-    color: #111827;
+  /* Select HOW TO SUBMIT styling */
+  .how-to-submit-section {
+    margin-top: 1rem;
   }
-
+  /* Responsive */
   @media (max-width: 640px) {
     .hero h1 {
       font-size: 2.4rem;
@@ -344,7 +341,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/446ebbfe-cf45-4456-baad-b0483bcb2376.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://placehold.co/32x32/000000/ffffff?text=Z" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -433,6 +430,15 @@
           <option value="SOFTWARE">SOFTWARE</option>
         </select>
 
+        <!-- New HOW TO SUBMIT section -->
+        <label for="how-to-submit">HOW TO SUBMIT:</label>
+        <select id="how-to-submit" name="how-to-submit" required>
+          <option value="" disabled selected>Select a submission method</option>
+          <option value="WHATSAPP">Send via WhatsApp</option>
+          <option value="CONTACT_SUPPORT">Contact Support</option>
+          <option value="EMAIL">Email Submission</option>
+        </select>
+
         <button type="submit" id="submit-order-btn">Send to WhatsApp</button>
       </form>
     </section>
@@ -459,6 +465,7 @@
     const caseNumberInput = document.getElementById('case-number');
     const userIssueSelect = document.getElementById('user-issue');
     const submitOrderBtn = document.getElementById('submit-order-btn');
+    const howToSubmitSelect = document.getElementById('how-to-submit');
 
     // Pricelist data for each brand
     const priceLists = {
@@ -604,19 +611,27 @@
       const model = selectedModelInput.value;
       const caseNumber = caseNumberInput.value;
       const issue = userIssueSelect.value;
+      const howToSubmit = howToSubmitSelect.value;
       const whatsappNumber = '+60178040403';
 
-      const message = 
+      let message = 
         `Hello Zuucaster IT Solution,%0A` +
         `I want to process an unlock.%0A` +
         `Name: ${name}%0A` +
         `Location: ${location}%0A` +
         `Selected Model: ${model}%0A` +
         `Case Number: ${caseNumber}%0A` +
-        `Issue: ${issue}`;
+        `Issue: ${issue}%0A` +
+        `How to Submit: ${howToSubmit}`;
 
-      const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${message}`;
-      window.open(whatsappUrl, '_blank');
+      if(howToSubmit === "WHATSAPP"){
+        const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+      } else if(howToSubmit === "CONTACT_SUPPORT"){
+        alert("Please contact our support team directly for assistance.");
+      } else if(howToSubmit === "EMAIL"){
+        alert("Please send your details via email to support@zuucaster.com.");
+      }
     });
 
   })();
@@ -629,7 +644,7 @@
     border: 0 !important;
     clip: rect(1px,1px,1px,1px) !important; 
     -webkit-clip-path: inset(50%) !important;
-            clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
     height: 1px !important; 
     margin: -1px !important; 
     overflow: hidden !important; 
