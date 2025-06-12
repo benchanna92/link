@@ -337,7 +337,7 @@
 <header>
   <div class="header-container" role="banner">
     <a href="#" class="logo" aria-label="Zuucaster IT Solution Logo">
-      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/459dd031-7944-4d34-afb6-0e391f0f2240.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/59655c9d-263e-4094-8dce-c7f493521d68.png" alt="Minimal black logo with letter Z in circle for Zuucaster IT Solution" />
       Zuucaster IT Solution
     </a>
   </div>
@@ -396,7 +396,6 @@
         <label for="user-name">Name:</label>
         <input type="text" id="user-name" name="user-name" placeholder="Your full name" required autocomplete="name" />
 
-        <!-- Selection for Model changed to brand selection -->
         <label for="user-brand-select">Selection Model:</label>
         <select id="user-brand-select" name="user-brand-select" required>
           <option value="" disabled selected>Select your model brand</option>
@@ -441,7 +440,7 @@
           <option value="EMAIL">Email Submission</option>
         </select>
 
-        <button type="submit" id="submit-order-btn">Send to WhatsApp</button>
+        <button type="submit" id="submit-order-btn">Send</button>
       </form>
     </section>
 
@@ -618,7 +617,7 @@
       const howToSubmit = howToSubmitSelect.value;
       const whatsappNumber = '+60178040403';
 
-      let message = 
+      let message =
         `Hello Zuucaster IT Solution,%0A` +
         `I want to process an unlock.%0A` +
         `Name: ${name}%0A` +
@@ -633,9 +632,15 @@
         const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${message}`;
         window.open(whatsappUrl, '_blank');
       } else if(howToSubmit === "CONTACT_SUPPORT"){
-        alert("Please contact our support team directly for assistance.");
+        // Open whatsapp contact support link with simple message
+        const supportMsg = encodeURIComponent("Hello Zuucaster IT Solution, I need support.");
+        const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+','')}?text=${supportMsg}`;
+        window.open(whatsappUrl, '_blank');
       } else if(howToSubmit === "EMAIL"){
-        alert("Please send your details via email to support@zuucaster.com.");
+        const subject = encodeURIComponent("Request to Process Unlock");
+        const body = message.replace(/%0A/g, '\n');
+        const mailtoUrl = `mailto:malaysiagsm1@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoUrl;
       }
     });
 
@@ -647,15 +652,15 @@
   .visually-hidden,
   .sr-only {
     border: 0 !important;
-    clip: rect(1px,1px,1px,1px) !important; 
+    clip: rect(1px,1px,1px,1px) !important;
     -webkit-clip-path: inset(50%) !important;
-    clip-path: inset(50%) !important;
-    height: 1px !important; 
-    margin: -1px !important; 
-    overflow: hidden !important; 
-    padding: 0 !important; 
-    position: absolute !important; 
-    width: 1px !important; 
+            clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
     white-space: nowrap !important;
   }
 </style>
