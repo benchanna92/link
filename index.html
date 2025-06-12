@@ -1,83 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Price List Checker</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Price List Checker - ZUUCASTER IT SOLUTION</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', Arial, sans-serif;
             margin: 20px;
+            background: #f7f9fc;
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .logo-header {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 3rem;
+            color: #3b3669; /* Elegant deep indigo */
+            margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: 0.04em;
+            user-select: none;
+            position: relative;
+            display: inline-block;
+        }
+        .logo-header .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #6b7280; /* Gray-500 */
+            letter-spacing: 0.15em;
+            display: block;
+            margin-top: 4px;
+        }
+        .logo-header::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #6459da 0%, #4338ca 100%);
+            border-radius: 2px;
+            margin: 12px auto 0;
+            box-shadow: 0 0 8px rgba(67, 56, 202, 0.6);
+            opacity: 0.8;
+        }
+        label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        input[type='text'] {
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            border: 2px solid #cbd5e1; /* Gray-300 */
+            border-radius: 8px;
+            width: 250px;
+            transition: border-color 0.3s ease;
+        }
+        input[type='text']:focus {
+            outline: none;
+            border-color: #6459da;
+            box-shadow: 0 0 8px rgba(100, 89, 218, 0.4);
+        }
+        button {
+            background-color: #6459da;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            margin-left: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover,
+        button:focus {
+            background-color: #4338ca;
+            outline: none;
+        }
+        select {
+            font-size: 1rem;
+            padding: 0.6rem 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+            width: 260px;
+        }
+        select:focus {
+            outline: none;
+            border-color: #6459da;
+            box-shadow: 0 0 8px rgba(100, 89, 218, 0.4);
         }
         .hidden {
             display: none;
         }
         .price-list {
-            margin-top: 20px;
+            margin-top: 24px;
+            max-width: 600px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(100, 89, 218, 0.12);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #374151; /* Gray-700 */
+        }
+        .price-list ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .price-list ul li {
+            margin: 8px 0;
+            border-bottom: 1px solid #e0e2ff;
+            padding-bottom: 6px;
+        }
+        h2 {
+            color: #4338ca;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        p {
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        p.note {
+            font-weight: 600;
+            color: #4b5563;
         }
     </style>
 </head>
 <body>
 
-<h1>Price List Checker</h1>
+    <header class="logo-header" role="banner" aria-label="ZUUCASTER IT SOLUTION Company Logo">
+        ZUUCASTER
+        <span class="subtitle">IT SOLUTION</span>
+    </header>
 
-<label for="access-code">Enter Access Code:</label>
-<input type="text" id="access-code" placeholder="Enter code here">
-<button onclick="checkAccess()">Submit</button>
+    <label for="access-code">Enter Access Code:</label>
+    <input
+        type="text"
+        id="access-code"
+        aria-label="Enter access code"
+        placeholder="Enter code here"
+        autocomplete="off"
+    />
+    <button type="button" onclick="checkAccess()" aria-label="Submit access code">
+        Submit
+    </button>
 
-<div id="model-selection" class="hidden">
-    <h2>Select Model</h2>
-    <select id="model" onchange="showPriceList()">
-        <option value="">--Select Model--</option>
-        <option value="oppo">OPPO</option>
-        <option value="vivo">VIVO</option>
-        <option value="realme">REALME</option>
-        <option value="honor">HONOR</option>
-    </select>
-</div>
+    <div id="model-selection" class="hidden" aria-live="polite">
+        <h2>Select Model</h2>
+        <select id="model" aria-label="Select device model" onchange="showPriceList()">
+            <option value="">--Select Model--</option>
+            <option value="oppo">OPPO</option>
+            <option value="vivo">VIVO</option>
+            <option value="realme">REALME</option>
+            <option value="honor">HONOR</option>
+        </select>
+    </div>
 
-<div id="price-list" class="price-list hidden"></div>
+    <section id="price-list" class="price-list hidden" aria-live="polite"></section>
 
-<div id="telco-pricing" class="hidden">
-    <h2>TELCO Unlock Pricing</h2>
-    <ul>
-        <li>REALME C21 - RM50</li>
-        <li>REALME C20 - RM50</li>
-        <li>REALME C53 - RM60</li>
-        <li>REALME C55 - RM60</li>
-        <li>REALME NOTE50 - RM100</li>
-        <li>REALME NOTE60 - RM100</li>
-        <li>REALME 11 - RM80 (ANDROID 14)</li>
-        <li>REALME 11 - RM130 (ANDROID 15)</li>
-        <li>REALME 12X - RM150 (ANDROID 14)</li>
-        <li>REALME 12X - RM200 (ANDROID 15)</li>
-        <li>REALME 14X - RM200</li>
-        <li>REALME 12 - RM200</li>
-        <li>REALME 13 - RM200</li>
-        <li>REALME 12 PRO - RM250</li>
-    </ul>
-    <p>- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
-    <p>- No refund after processing.</p>
-    <p>- No cancellation after service in progress.</p>
-</div>
+    <section id="telco-pricing" class="price-list hidden" aria-live="polite">
+        <h2>TELCO Unlock Pricing</h2>
+        <ul>
+            <li>REALME C21 - RM50</li>
+            <li>REALME C20 - RM50</li>
+            <li>REALME C53 - RM60</li>
+            <li>REALME C55 - RM60</li>
+            <li>REALME NOTE50 - RM100</li>
+            <li>REALME NOTE60 - RM100</li>
+            <li>REALME 11 - RM80 (ANDROID 14)</li>
+            <li>REALME 11 - RM130 (ANDROID 15)</li>
+            <li>REALME 12X - RM150 (ANDROID 14)</li>
+            <li>REALME 12X - RM200 (ANDROID 15)</li>
+            <li>REALME 14X - RM200</li>
+            <li>REALME 12 - RM200</li>
+            <li>REALME 13 - RM200</li>
+            <li>REALME 12 PRO - RM250</li>
+        </ul>
+        <p class="note">- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
+        <p class="note">- No refund after processing.</p>
+        <p class="note">- No cancellation after service in progress.</p>
+    </section>
 
 <script>
     function checkAccess() {
-        const accessCode = document.getElementById('access-code').value;
+        const accessCodeInput = document.getElementById('access-code');
+        const accessCode = accessCodeInput.value.trim().toLowerCase();
+        const modelSelection = document.getElementById('model-selection');
+        const priceListDiv = document.getElementById('price-list');
+        const telcoPricing = document.getElementById('telco-pricing');
+
         if (accessCode === 'zuucaster') {
-            document.getElementById('model-selection').classList.remove('hidden');
+            modelSelection.classList.remove('hidden');
+            priceListDiv.classList.add('hidden');
+            priceListDiv.innerHTML = '';
+            telcoPricing.classList.add('hidden');
         } else {
             alert('Invalid access code. Please try again.');
+            modelSelection.classList.add('hidden');
+            priceListDiv.classList.add('hidden');
+            priceListDiv.innerHTML = '';
+            telcoPricing.classList.add('hidden');
         }
     }
 
     function showPriceList() {
         const model = document.getElementById('model').value;
         const priceListDiv = document.getElementById('price-list');
-        priceListDiv.innerHTML = ''; // Clear previous content
+        priceListDiv.innerHTML = '';
 
+        if (!model) {
+            priceListDiv.classList.add('hidden');
+            document.getElementById('telco-pricing').classList.add('hidden');
+            return;
+        }
+
+        let html = '';
         if (model === 'oppo') {
-            priceListDiv.innerHTML = `
+            html = `
                 <h2>Price List for OPPO</h2>
                 <ul>
                     <li>OPPO A16 - RM100</li>
@@ -106,7 +254,7 @@
                 </ul>
             `;
         } else if (model === 'vivo') {
-            priceListDiv.innerHTML = `
+            html = `
                 <h2>Price List for VIVO</h2>
                 <ul>
                     <li>VIVO Y03 - RM170</li>
@@ -122,7 +270,7 @@
                 </ul>
             `;
         } else if (model === 'realme') {
-            priceListDiv.innerHTML = `
+            html = `
                 <h2>Price List for REALME</h2>
                 <ul>
                     <li>REALME C21 - RM50</li>
@@ -142,12 +290,13 @@
                 </ul>
             `;
         } else if (model === 'honor') {
-            priceListDiv.innerHTML = `
+            html = `
                 <h2>Price List for HONOR</h2>
-                <p>Details coming soon.</p>
+                <p>HONOR pricing and details will be available soon.</p>
             `;
         }
 
+        priceListDiv.innerHTML = html;
         priceListDiv.classList.remove('hidden');
         document.getElementById('telco-pricing').classList.remove('hidden');
     }
@@ -155,3 +304,4 @@
 
 </body>
 </html>
+
